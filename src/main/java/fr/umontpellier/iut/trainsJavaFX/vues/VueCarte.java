@@ -1,5 +1,6 @@
 package fr.umontpellier.iut.trainsJavaFX.vues;
 
+import fr.umontpellier.iut.trainsJavaFX.ICarte;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -12,9 +13,9 @@ import javafx.scene.layout.StackPane;
  */
 public class VueCarte extends StackPane {
 
-    private final Carte carte;
+    private final ICarte carte;
 
-    public VueCarte(Carte carte) {
+    public VueCarte(ICarte carte) {
         this.carte = carte;
     }
 
