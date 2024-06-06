@@ -27,23 +27,22 @@ public class VueDuJeu extends BorderPane {
     private final IJeu jeu;
     private VuePlateau plateau;
 
-    @FXML
-    private VBox ConteneurMain;
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
         plateau = new VuePlateau();
-        setCenter(plateau);
+        Pane p = new Pane();
+        setLeft(p);
+        p.getChildren().add(plateau);
+
 
         try {
-            VBox loader = FXMLLoader.load((getClass().getClassLoader().getResource("fxml/main.fxml")));
-            setBottom(loader);
+            HBox ConteneurMain = FXMLLoader.load((getClass().getClassLoader().getResource("fxml/main.fxml")));
+
+            setBottom(ConteneurMain);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
-
 
 
 
