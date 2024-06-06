@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="fenetre" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+      <HBox fx:id="hbox_bas" prefHeight="110.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+   </bottom>
+   <right>
+      <TabPane fx:id="selection" prefHeight="290.0" prefWidth="250.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab fx:id="cartes_en_jeux" text="Cartes en jeux" />
+          <Tab fx:id="cartes_achats" text="Cartes Achats" />
+            <Tab fx:id="joueurs" text="Joueurs" />
+        </tabs>
+      </TabPane>
+   </right>
+
+</BorderPane>
