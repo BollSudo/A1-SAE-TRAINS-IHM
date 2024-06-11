@@ -35,7 +35,7 @@ public class VueCarte extends StackPane {
 
         setOnMouseClicked(((mouseEvent) -> {
             GestionJeu.getJeu().joueurCourantProperty().get().uneCarteDeLaMainAEteChoisie(carte.getNom());
-            System.out.println("La carte" + carte.getNom() + "a été choisie");
+            System.out.println("La carte" + carte.getNom() + " a été choisie");
         }));
         int test = new Random().nextInt(100000, 999999);
         setStyle("-fx-background-color:#"+Integer.toString(test));

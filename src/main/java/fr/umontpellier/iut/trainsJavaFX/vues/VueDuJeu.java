@@ -4,6 +4,7 @@ import fr.umontpellier.iut.trainsJavaFX.IJeu;
 import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.ListeDeCartes;
+import javafx.beans.binding.StringBinding;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
@@ -35,6 +37,15 @@ public class VueDuJeu extends BorderPane {
     @FXML
     private HBox conteneurMainBottom;
 
+    @FXML
+    private Label instruction;
+
+    @FXML
+    private Label nomJoueurCourant;
+
+    @FXML
+    private Button boutonPasser;
+
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
@@ -53,33 +64,32 @@ public class VueDuJeu extends BorderPane {
         }
 
         creerCartes();
+        creerListeners();
+
+
+    }
+
+    private void creerListeners() {
+
+        boutonPasser.setOnMouseClicked(actionPasserParDefaut);
 
         jeu.joueurCourantProperty().addListener((Observable, ancien, nouveau) -> {
             conteneurMainBottom.getChildren().clear();
             creerCartes();
         });
 
-
         for (IJoueur joueur : jeu.getJoueurs()) {
-            joueur.mainProperty().addListener(new ListChangeListener<Carte>() {
-                @Override
-                public void onChanged(Change<? extends Carte> change) {
-                    while (change.next()) {
-                        for (Carte carte : change.getRemoved()) {
-                            VueCarte c = trouverBoutonCartes(carte);
-                            if (c!=null) {
-                                conteneurMainBottom.getChildren().remove(c);
-                            }
+            joueur.mainProperty().addListener((ListChangeListener<Carte>) change -> {
+                while (change.next()) {
+                    for (Carte carte : change.getRemoved()) {
+                        VueCarte c = trouverBoutonCartes(carte);
+                        if (c!=null) {
+                            conteneurMainBottom.getChildren().remove(c);
                         }
                     }
                 }
             });
         }
-
-
-
-
-
 
     }
 
@@ -87,13 +97,26 @@ public class VueDuJeu extends BorderPane {
         plateau.prefWidthProperty().bind(getScene().widthProperty());
         plateau.prefHeightProperty().bind(getScene().heightProperty());
         plateau.creerBindings();
+        instruction.textProperty().bind(jeu.instructionProperty());
+        nomJoueurCourant.textProperty().bind(new StringBinding() {
+            {
+                super.bind(jeu.joueurCourantProperty());
+            }
+            @Override
+            protected String computeValue() {
+                return jeu.joueurCourantProperty().get().getNom();
+            }
+        });
     }
 
     public IJeu getJeu() {
         return jeu;
     }
 
-    EventHandler<? super MouseEvent> actionPasserParDefaut = (mouseEvent -> System.out.println("Passer a été demandé"));
+    EventHandler<? super MouseEvent> actionPasserParDefaut = (mouseEvent) -> {
+        System.out.println("Passer a été demandé");
+        getJeu().passerAEteChoisi();
+    };
 
     private void creerCartes() {
         ListeDeCartes mainJoueurCourrant = jeu.joueurCourantProperty().get().mainProperty();
