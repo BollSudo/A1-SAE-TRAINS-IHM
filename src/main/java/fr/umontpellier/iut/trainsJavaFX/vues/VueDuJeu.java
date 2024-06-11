@@ -4,21 +4,24 @@ import fr.umontpellier.iut.trainsJavaFX.IJeu;
 import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.ListeDeCartes;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
 
 import java.io.IOException;
-import java.util.Random;
+import java.util.StringJoiner;
 
 /**
  * Cette classe correspond à la fenêtre principale de l'application.
@@ -36,15 +39,24 @@ public class VueDuJeu extends BorderPane {
 
     @FXML
     private HBox conteneurMainBottom;
-
     @FXML
     private Label instruction;
-
     @FXML
     private Label nomJoueurCourant;
-
     @FXML
     private Button boutonPasser;
+    @FXML
+    private ImageView logoArgent;
+    @FXML
+    private ImageView logoPointsRails;
+    @FXML
+    private ImageView logoJetonsRails;
+    @FXML
+    private Label labelNbArgent;
+    @FXML
+    private Label labelNbJetonsRails;
+    @FXML
+    private Label labelNbPointsRails;
 
 
     public VueDuJeu(IJeu jeu) {
@@ -62,6 +74,7 @@ public class VueDuJeu extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        ajouterLogos();
 
         creerCartes();
         creerListeners();
@@ -94,19 +107,52 @@ public class VueDuJeu extends BorderPane {
     }
 
     public void creerBindings() {
+        ObjectProperty<IJoueur> j = jeu.joueurCourantProperty();
         plateau.prefWidthProperty().bind(getScene().widthProperty());
         plateau.prefHeightProperty().bind(getScene().heightProperty());
         plateau.creerBindings();
         instruction.textProperty().bind(jeu.instructionProperty());
+
         nomJoueurCourant.textProperty().bind(new StringBinding() {
             {
-                super.bind(jeu.joueurCourantProperty());
+                super.bind(j);
             }
             @Override
             protected String computeValue() {
-                return jeu.joueurCourantProperty().get().getNom();
+                return j.getValue().getNom();
             }
         });
+
+        nomJoueurCourant.styleProperty().bind(new StringBinding() {
+            {
+                super.bind(j);
+            }
+            @Override
+            protected String computeValue() {
+                return "-fx-text-fill: ".concat(CouleursJoueurs.couleursBackgroundJoueur.get(j.getValue().getCouleur()));
+            }
+        });
+
+        logoJetonsRails.imageProperty().bind(new ObjectBinding<>() {
+            {
+                super.bind(j);
+            }
+            @Override
+            protected Image computeValue() {
+                String couleur = "";
+                switch (j.getValue().getCouleur()) {
+                    case BLEU -> couleur = "blue";
+                    case VERT -> couleur = "green";
+                    case ROUGE -> couleur = "red";
+                    case JAUNE -> couleur = "yellow";
+                }
+                return new Image("images/icons/cube_".concat(couleur).concat(".png"));
+            }
+        });
+
+        labelNbPointsRails.textProperty().bind(j.getValue().pointsRailsProperty().asString());
+        labelNbArgent.textProperty().bind(j.getValue().argentProperty().asString());
+        labelNbJetonsRails.textProperty().bind(j.getValue().nbJetonsRailsProperty().asString());
     }
 
     public IJeu getJeu() {
@@ -119,7 +165,7 @@ public class VueDuJeu extends BorderPane {
     };
 
     private void creerCartes() {
-        ListeDeCartes mainJoueurCourrant = jeu.joueurCourantProperty().get().mainProperty();
+        ListeDeCartes mainJoueurCourrant = jeu.joueurCourantProperty().getValue().mainProperty();
         for (int i = 0; i < mainJoueurCourrant.size(); i++) {
             VueCarte carte = new VueCarte(mainJoueurCourrant.get(i));
             conteneurMainBottom.getChildren().add(carte);
@@ -134,6 +180,11 @@ public class VueDuJeu extends BorderPane {
             }
         }
         return null;
+    }
+
+    public void ajouterLogos() {
+        logoPointsRails.setImage(new Image("images/icons/rail.png"));
+        logoArgent.setImage(new Image("images/icons/coins.png"));
     }
 
 }
