@@ -24,8 +24,8 @@ public class VueCarte extends StackPane {
         //Aspact ratoi 2:3
 
         //HBox.setHgrow(this, Priority.ALWAYS);
-        setPrefHeight(100);
-        setPrefWidth(90);
+        setMinHeight(100);
+        setMinWidth(90);
 
         setScaleX(1.1);
         setOnMouseEntered((event) -> setScaleY(1.2));

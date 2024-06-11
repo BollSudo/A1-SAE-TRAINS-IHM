@@ -33,7 +33,7 @@ import java.util.StringJoiner;
  * (le joueur courant, ses cartes en main, son score, ...)
  * ainsi que les listeners à exécuter lorsque ces éléments changent
  */
-public class VueDuJeu extends BorderPane {
+public class VueDuJeu extends GridPane {
 
     private final IJeu jeu;
     private VuePlateau plateau;
@@ -64,31 +64,49 @@ public class VueDuJeu extends BorderPane {
     @FXML
     private ImageView imageDeck;
 
+    @FXML
+    private VBox aside;
+
+    @FXML
+    private GridPane reserve;
+
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
         plateau = new VuePlateau();
-        Pane p = new StackPane();
-        setCenter(p);
-        p.getChildren().add(plateau);
-        p.setStyle("-fx-background-color: black");
-        Pane p2 = new Pane();
-        p2.setMinWidth(300);
-        setRight(p2);
+        VBox p2 = new VBox();
+
         p2.setStyle("-fx-background-color: #722222");
+
+
+        add(p2, 0, 0);
+
+        p2.getChildren().add(plateau);
 
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/main.fxml"));
             loader.setController(this);
             HBox conteneurMain = loader.load();
-            setBottom(conteneurMain);
+            add(conteneurMain, 0, 1, 2, 1);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        try {
+            FXMLLoader loader2 = new FXMLLoader(getClass().getClassLoader().getResource("fxml/right.fxml"));
+            loader2.setController(this);
+            VBox aside = loader2.load();
+            add(aside, 1, 0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
         conteneurMainBottom.setPrefWidth(1000);
         ajouterLogos();
 
+        creerReserve();
         creerCartes();
         creerListeners();
 
@@ -200,6 +218,27 @@ public class VueDuJeu extends BorderPane {
         logoArgent.setImage(new Image("images/icons/coins.png"));
         imageDeck.setImage(new Image("images/boutons/deck.png"));
         imageDefausse.setImage(new Image("images/boutons/defausse.png"));
+    }
+
+    private void creerReserve() {
+
+        int i = 0;
+        int j = 0;
+        for (Carte c : jeu.getReserve()) {
+            if (c!=null) {
+                VueCarte carte = new VueCarte(c);
+                carte.setScaleX(1);
+                carte.setMinHeight(USE_COMPUTED_SIZE);
+                carte.setMinWidth(USE_COMPUTED_SIZE);
+                reserve.add(carte, i, j);
+                if (i<5) {
+                    i++;
+                } else {
+                    i=0;
+                    j++;
+                }
+            }
+        }
     }
 
 }
