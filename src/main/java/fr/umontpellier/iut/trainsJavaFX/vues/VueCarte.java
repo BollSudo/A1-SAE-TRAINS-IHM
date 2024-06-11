@@ -24,12 +24,13 @@ public class VueCarte extends StackPane {
 
     public VueCarte(ICarte carte) {
         this.carte = carte;
+        //Aspact ratoi 2:3
 
-        HBox.setHgrow(this, Priority.ALWAYS);
-        setPrefWidth(1000);
-        setMaxHeight(Double.MAX_VALUE);
+        //HBox.setHgrow(this, Priority.ALWAYS);
+        setPrefHeight(100);
+        setPrefWidth(90);
 
-        setScaleX(1.2);
+        setScaleX(1.1);
         setOnMouseEntered((event) -> setScaleY(1.2));
         setOnMouseExited((event) -> setScaleY(1));
 

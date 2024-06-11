@@ -80,16 +80,16 @@ public class VuePlateau extends Pane {
     private void bindRedimensionEtCentragePlateau() {
         mapVille.fitWidthProperty().bind(((Region) getParent()).widthProperty());
         mapVille.fitHeightProperty().bind(((Region) getParent()).heightProperty());
-        mapVille.layoutXProperty().bind(new DoubleBinding() { // Pour maintenir le plateau au centre
-            {
-                super.bind(widthProperty(),heightProperty());
-            }
-            @Override
-            protected double computeValue() {
-                double imageViewWidth = mapVille.getLayoutBounds().getWidth();
-                return (getWidth() - imageViewWidth) / 2;
-            }
-        });
+//        mapVille.layoutXProperty().bind(new DoubleBinding() { // Pour maintenir le plateau au centre
+//            {
+//                super.bind(widthProperty(),heightProperty());
+//            }
+//            @Override
+//            protected double computeValue() {
+//                double imageViewWidth = mapVille.getLayoutBounds().getWidth();
+//                return (getWidth() - imageViewWidth) / 2;
+//            }
+//        });
         tuiles.translateXProperty().bind(new DoubleBinding() {
             {super.bind(mapVille.boundsInParentProperty());}
             @Override

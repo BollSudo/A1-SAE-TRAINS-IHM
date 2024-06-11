@@ -12,6 +12,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -58,13 +59,24 @@ public class VueDuJeu extends BorderPane {
     @FXML
     private Label labelNbPointsRails;
 
+    @FXML
+    private ImageView imageDefausse;
+    @FXML
+    private ImageView imageDeck;
+
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
         plateau = new VuePlateau();
-        Pane p = new Pane();
-        setLeft(p);
+        Pane p = new StackPane();
+        setCenter(p);
         p.getChildren().add(plateau);
+        p.setStyle("-fx-background-color: black");
+        Pane p2 = new Pane();
+        p2.setMinWidth(300);
+        setRight(p2);
+        p2.setStyle("-fx-background-color: #722222");
+
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/main.fxml"));
@@ -74,6 +86,7 @@ public class VueDuJeu extends BorderPane {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        conteneurMainBottom.setPrefWidth(1000);
         ajouterLogos();
 
         creerCartes();
@@ -185,6 +198,8 @@ public class VueDuJeu extends BorderPane {
     public void ajouterLogos() {
         logoPointsRails.setImage(new Image("images/icons/rail.png"));
         logoArgent.setImage(new Image("images/icons/coins.png"));
+        imageDeck.setImage(new Image("images/boutons/deck.png"));
+        imageDefausse.setImage(new Image("images/boutons/defausse.png"));
     }
 
 }
