@@ -2,13 +2,10 @@ package fr.umontpellier.iut.trainsJavaFX.vues;
 
 import fr.umontpellier.iut.trainsJavaFX.GestionJeu;
 import fr.umontpellier.iut.trainsJavaFX.ICarte;
-import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 import java.util.Random;
 
@@ -38,8 +35,10 @@ public class VueCarte extends StackPane {
             GestionJeu.getJeu().joueurCourantProperty().get().uneCarteDeLaMainAEteChoisie(carte.getNom());
             System.out.println("La carte" + carte.getNom() + " a été choisie");
         }));
-        int test = new Random().nextInt(100000, 999999);
-        setStyle("-fx-background-color:#"+Integer.toString(test));
+        Image image = new Image(nomCarteValide(carte.getNom()));
+        this.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(1, 1, true, true, false,false))));
+
+
     }
 
     public void setCarteChoisieListener(EventHandler<MouseEvent> quandCarteEstChoisie) {
@@ -50,4 +49,8 @@ public class VueCarte extends StackPane {
         return carte;
     }
 
+    private String nomCarteValide(String carte){
+        System.out.println("images/cartes/"+carte.toLowerCase().replace(" ", "_")+".jpg");
+        return "images/cartes/"+carte.toLowerCase().replace(" ", "_")+".jpg";
+    }
 }
