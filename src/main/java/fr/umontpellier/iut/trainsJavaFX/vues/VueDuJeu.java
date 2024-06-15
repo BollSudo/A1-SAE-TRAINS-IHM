@@ -48,9 +48,6 @@ public class VueDuJeu extends GridPane {
 
     public static final double HAUTEUR_ECRAN = Screen.getPrimary().getBounds().getHeight();
     public static final double LONGUEUR_ECRAN = Screen.getPrimary().getBounds().getWidth();
-
-    private static DoubleProperty ratioLongueurFenetre;
-    private static DoubleProperty ratioHauteurFenetre;
     private static DoubleProperty ratioResolutionFenetre;
 
     @FXML
@@ -87,7 +84,7 @@ public class VueDuJeu extends GridPane {
             loader.setController(this);
             conteneurInstruction = loader.load();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         add(conteneurInstruction, 0, 0, 3, 1);
@@ -159,8 +156,6 @@ public class VueDuJeu extends GridPane {
 
 
     private void creerReserve() {
-
-        System.out.println(jeu.getReserve().size());
         int i = 0;
         int j = 0;
         for (Carte c : jeu.getReserve()) {
@@ -184,40 +179,11 @@ public class VueDuJeu extends GridPane {
 
 
     public void createRatio() {
-        ratioHauteurFenetre = new SimpleDoubleProperty();
-        ratioLongueurFenetre = new SimpleDoubleProperty();
         ratioResolutionFenetre = new SimpleDoubleProperty();
-        ratioLongueurFenetre.bind(widthProperty().divide(LONGUEUR_ECRAN));
-        ratioHauteurFenetre.bind(heightProperty().divide(HAUTEUR_ECRAN));
         ratioResolutionFenetre.bind(Bindings.divide(widthProperty().multiply(heightProperty()),LONGUEUR_ECRAN * HAUTEUR_ECRAN));
 
-
-        ratioHauteurFenetre.addListener(((observableValue, number, t1) ->
-                System.out.println("HAUTEUR : " + t1)));
-        ratioLongueurFenetre.addListener(((observableValue, number, t1) ->
-                System.out.println("LONGUEUR : " + t1)));
-        ratioResolutionFenetre.addListener(((observableValue, number, t1) ->
-                System.out.println("RESOLUTION : " + t1)));
-    }
-
-    public double getRatioLongueurFenetre() {
-        return ratioLongueurFenetre.get();
-    }
-
-    public DoubleProperty ratioLongueurFenetreProperty() {
-        return ratioLongueurFenetre;
-    }
-
-    public double getRatioHauteurFenetre() {
-        return ratioHauteurFenetre.get();
-    }
-
-    public DoubleProperty ratioHauteurFenetreProperty() {
-        return ratioHauteurFenetre;
-    }
-
-    public double getRatioResolutionFenetre() {
-        return ratioResolutionFenetre.get();
+//        ratioResolutionFenetre.addListener(((observableValue, number, t1) ->
+//                System.out.println("RESOLUTION : " + t1)));
     }
 
     public static DoubleProperty ratioResolutionFenetreProperty() {

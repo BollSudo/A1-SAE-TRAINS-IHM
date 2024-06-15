@@ -40,8 +40,16 @@ public class VueCarte extends StackPane {
 
 
         //setScaleX(1.1);
-        setOnMouseEntered((event) -> setScaleY(1.2));
-        setOnMouseExited((event) -> setScaleY(1));
+        setOnMouseEntered((event) -> {
+            setScaleX(1.2);
+            setScaleY(1.2);
+            setViewOrder(-1);
+        });
+        setOnMouseExited((event) -> {
+            setScaleX(1);
+            setScaleY(1);
+            setViewOrder(0);
+        });
 
         Image image = new Image(nomCarteValide(carte.getNom()));
         this.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(1, 1, true, true, false,false))));

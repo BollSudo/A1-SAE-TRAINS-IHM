@@ -45,7 +45,7 @@ public class VueAutresJoueurs extends VBox {
                 loader.setController(this);
                 getChildren().add(loader.load());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
             nomJoueur.setText(joueur.getNom());
             logoJetonsJoueur.setImage(new Image("images/icons/cube_".concat(CouleursJoueurs.getNomCouleurPratique(joueur)).concat(".png")));

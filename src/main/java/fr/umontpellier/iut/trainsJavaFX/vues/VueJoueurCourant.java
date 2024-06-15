@@ -74,7 +74,7 @@ public class VueJoueurCourant extends HBox {
             loader2.load();
             getChildren().add(conteneurMain);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         conteneurCartesEnJeu.setPrefWrapLength(VueDuJeu.LONGUEUR_ECRAN * 0.375);
