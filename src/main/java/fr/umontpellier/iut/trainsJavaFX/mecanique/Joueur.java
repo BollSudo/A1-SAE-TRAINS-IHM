@@ -57,6 +57,7 @@ public class Joueur implements IJoueur {
         pioche.add(jeu.prendreDansLaReserve("Gare"));
         pioche.melanger();
         piocherEnMain(5);
+//        testCasPrecis(1);
     }
 
     public Jeu getJeu() {
@@ -521,4 +522,45 @@ public class Joueur implements IJoueur {
     public void uneCarteEnJeuAEteChoisie(String carteEnMain) {
         getEtatCourant().carteEnJeuChoisie(carteEnMain);
     }
+
+    @Override
+    public void laPiocheAEteChoisie() {
+        getEtatCourant().piocheChoisie();
+    }
+
+    @Override
+    public void laDefausseAEteChoisie() {
+        getEtatCourant().defausser();
+    }
+
+    @Override
+    public void recevoirArgentAEteChoisi() {
+        getEtatCourant().recevoirArgent();
+    }
+
+    private void testCasPrecis(int nbCartesDeLaMainAEnlever) {
+        for (int i = 0; i < nbCartesDeLaMainAEnlever; i++)
+            main.remove(0);
+/*      //          testCasPrecis(2);
+        main.addAll(new CentreDeControle());
+        pioche.add(0, new TrainExpress());
+        pioche.add(0, new Appartement());*/
+
+/*      //          testCasPrecis(1);
+        main.addAll(new FeuDeSignalisation());*/
+
+/*        //          testCasPrecis(1);
+        main.addAll(new CentreDeRenseignements());*/
+
+/*                //          testCasPrecis(2);
+        main.addAll(new ParcDAttractions(), new TrainExpress());*/
+
+/*        //          testCasPrecis(1);
+        main.addAll(new Echangeur());*/
+
+/*        // test fin du jeu
+        nbJetonsRails.setValue(2);*/
+    }
+
+
 }

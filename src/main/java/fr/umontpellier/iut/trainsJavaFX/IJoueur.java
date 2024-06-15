@@ -23,5 +23,8 @@ public interface IJoueur {
 
     void uneCarteDeLaMainAEteChoisie(String carteEnMain);
     void uneCarteEnJeuAEteChoisie(String carteEnMain);
+    void laPiocheAEteChoisie();
+    void laDefausseAEteChoisie();
+    void recevoirArgentAEteChoisi();
 
 }
