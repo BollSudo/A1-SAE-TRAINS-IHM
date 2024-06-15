@@ -14,7 +14,7 @@
    <children>
       <VBox alignment="TOP_CENTER">
          <children>
-            <Label text="DECK : nbcartes" />
+            <Label maxHeight="50.0" minHeight="50.0" text="DECK : nbcartes" />
             <Separator />
             <ImageView fx:id="imageDeck" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -22,12 +22,12 @@
                </image></ImageView>
          </children>
       </VBox>
-      <Separator orientation="VERTICAL" prefHeight="200.0" />
+      <Separator orientation="VERTICAL" />
       <Separator orientation="VERTICAL" />
       <VBox fx:id="conteneurMain" alignment="CENTER">
          <children>
             <Separator />
-            <HBox fx:id="conteneurMainTop" alignment="CENTER" fillHeight="false" maxHeight="50.0" VBox.vgrow="ALWAYS">
+            <HBox fx:id="conteneurMainTop" alignment="CENTER" fillHeight="false" maxHeight="50.0" VBox.vgrow="NEVER">
                <children>
                   <HBox fx:id="vueJoueurCourant" alignment="CENTER">
                      <children>
@@ -71,8 +71,8 @@
             <Separator layoutX="10.0" layoutY="10.0" />
             <HBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
                <children>
-                  <HBox fx:id="conteneurMainBottom" alignment="TOP_CENTER" HBox.hgrow="ALWAYS" />
-                  <VBox alignment="TOP_CENTER" minWidth="100.0">
+                  <HBox fx:id="conteneurMainBottom" alignment="CENTER" HBox.hgrow="ALWAYS" />
+                  <VBox alignment="TOP_RIGHT" fillWidth="false" layoutX="206.0" layoutY="10.0" minWidth="60.0" HBox.hgrow="NEVER">
                      <children>
                         <HBox alignment="CENTER">
                            <children>
@@ -84,7 +84,11 @@
                               <Label fx:id="labelCartesRecues" text="Recues" />
                            </children>
                         </HBox>
-                        <StackPane fx:id="conteneurCartesRecues" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="152.0" prefWidth="114.0" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_LEFT" fillWidth="false" HBox.hgrow="NEVER">
+                     <children>
+                        <StackPane fx:id="conteneurCartesRecues" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" />
                      </children>
                      <HBox.margin>
                         <Insets right="50.0" />
@@ -99,7 +103,7 @@
       <Separator orientation="VERTICAL" />
       <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0">
          <children>
-            <Label text="DEFAUSSE : nbcartes" />
+            <Label maxHeight="50.0" minHeight="50.0" text="DEFAUSSE : nbcartes" VBox.vgrow="NEVER" />
             <Separator />
             <ImageView fx:id="imageDefausse" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <image>

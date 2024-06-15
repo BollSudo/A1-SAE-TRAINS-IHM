@@ -41,6 +41,8 @@ public class VueDuJeu extends GridPane {
     private GridPane conteneurReserve;
 
     private VueJoueurCourant vueJoueurCourant;
+
+    private VueAutresJoueurs vueAutresJoueurs;
     private Pane conteneurInstruction;
 
 
@@ -63,13 +65,18 @@ public class VueDuJeu extends GridPane {
         this.jeu = jeu;
         plateau = new VuePlateau();
         vueJoueurCourant = new VueJoueurCourant(jeu.joueurCourantProperty().get());
+        vueAutresJoueurs = new VueAutresJoueurs();
         conteneurReserve = new GridPane();
-//        ColumnConstraints colUne = new ColumnConstraints();
+       ColumnConstraints colUne = new ColumnConstraints();
+       colUne.setMinWidth(0.08681 * LONGUEUR_ECRAN);
 //        ColumnConstraints colDeux = new ColumnConstraints();
 //        colUne.setPercentWidth(70);
 //        colDeux.setPercentWidth(30);
-//        getColumnConstraints().addAll(colUne,colDeux);
+        getColumnConstraints().addAll(colUne);
 
+        RowConstraints rowDeux = new RowConstraints();
+        rowDeux.setMinHeight(0.1 * HAUTEUR_ECRAN);
+        getRowConstraints().addAll(new RowConstraints(), new RowConstraints(), rowDeux);
 
 
         VBox conteneurPlateau = new VBox();
@@ -83,11 +90,12 @@ public class VueDuJeu extends GridPane {
             throw new RuntimeException(e);
         }
 
-        add(conteneurInstruction, 0, 0, 2, 1);
-        add(conteneurPlateau, 0, 1, 1, 2);
-        add(vueJoueurCourant.getInfoJoueurCourant(), 1, 2);
-        add(vueJoueurCourant, 0, 3, 2, 1);
-        add(conteneurReserve, 1, 1);
+        add(conteneurInstruction, 0, 0, 3, 1);
+        add(conteneurPlateau, 1, 1, 1, 2);
+        add(vueJoueurCourant.getInfoJoueurCourant(), 2, 2);
+        add(vueJoueurCourant, 0, 3, 3, 1);
+        add(conteneurReserve, 2, 1);
+        add(vueAutresJoueurs, 0, 1, 1, 2);
 
         creerReserve();
         creerListeners();
@@ -113,6 +121,9 @@ public class VueDuJeu extends GridPane {
                         .otherwise(getMaxWidth() * 0.4)
                 );
         vueJoueurCourant.getInfoJoueurCourant().prefWidthProperty().bind(conteneurReserve.maxWidthProperty());
+        vueJoueurCourant.getConteneurCartesRecues().minWidthProperty().bind(Bindings.when(ratioResolutionFenetreProperty().greaterThan(0.4))
+                .then(ratioResolutionFenetre.multiply(VueCarte.LONGUEUR_INIT))
+                .otherwise(VueCarte.LONGUEUR_INIT * 0.4));
 
         nomJoueurCourant.textProperty().bind(new StringBinding() {
             {

@@ -6,6 +6,7 @@ import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.ListeDeCartes;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,6 +14,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,6 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
@@ -53,7 +56,7 @@ public class VueJoueurCourant extends HBox {
     @FXML
     private Button boutonPasser;
     @FXML
-    private Pane infoJoueurCourant;
+    private VBox infoJoueurCourant;
     @FXML
     private FlowPane conteneurCartesEnJeu;
     @FXML
@@ -98,7 +101,7 @@ public class VueJoueurCourant extends HBox {
                 while (change.next()) {
                     for (Carte carte : change.getAddedSubList()) {
                         VueCarte c = new VueCarte(carte);
-                        c.scale(0.8);
+                        c.scale(0.7);
                         c.createBindingsRatio();
                         c.setDisable(true);
                         conteneurCartesEnJeu.getChildren().add(c);
@@ -117,7 +120,6 @@ public class VueJoueurCourant extends HBox {
                     int translateXFactor = 5;
                     for (Carte carte : change.getAddedSubList()) {
                         VueCarte c = new VueCarte(carte);
-                        c.scale(0.9);
                         c.setDisable(true);
                         c.setTranslateX(j.cartesRecuesProperty().size()*translateXFactor);
                         c.createBindingsRatio();
@@ -174,14 +176,7 @@ public class VueJoueurCourant extends HBox {
                 conteneurMainBottom.getChildren().clear();
                 creerCartes();
                 createBindings();
-                String couleur = "";
-                switch (joueurCourant.getCouleur()) {
-                    case BLEU -> couleur = "blue";
-                    case VERT -> couleur = "green";
-                    case ROUGE -> couleur = "red";
-                    case JAUNE -> couleur = "yellow";
-                }
-                logoJetonsRails.setImage(new Image("images/icons/cube_".concat(couleur).concat(".png")));
+                logoJetonsRails.setImage(new Image("images/icons/cube_".concat(CouleursJoueurs.getNomCouleurPratique(joueurCourant)).concat(".png")));
             }
         });
 
@@ -196,6 +191,8 @@ public class VueJoueurCourant extends HBox {
     public Pane getInfoJoueurCourant() {
         return infoJoueurCourant;
     }
+
+    public Pane getConteneurCartesRecues() {return conteneurCartesRecues;}
 
     private void creerBindingsImagesCartesRatio(ImageView imageView, double minRatio) {
         imageView.fitWidthProperty().bind(Bindings.when(VueDuJeu.ratioResolutionFenetreProperty().greaterThan(minRatio))
