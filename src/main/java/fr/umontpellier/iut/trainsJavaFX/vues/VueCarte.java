@@ -2,16 +2,17 @@ package fr.umontpellier.iut.trainsJavaFX.vues;
 
 import fr.umontpellier.iut.trainsJavaFX.GestionJeu;
 import fr.umontpellier.iut.trainsJavaFX.ICarte;
+import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
-import fr.umontpellier.iut.trainsJavaFX.mecanique.Joueur;
-import fr.umontpellier.iut.trainsJavaFX.mecanique.etatsJoueur.tournormal.AchatCarte;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.text.Normalizer;
 
@@ -72,8 +73,7 @@ public class VueCarte extends StackPane {
     EventHandler<MouseEvent> handlerCartesReserve = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            AchatCarte achatCarte = new AchatCarte((Joueur) GestionJeu.getJeu().joueurCourantProperty().get());
-            achatCarte.carteEnReserveChoisie(carte.getNom());
+            GestionJeu.getJeu().uneCarteDeLaReserveEstAchetee(carte.getNom());
             System.out.println("ACHAT:" + carte.getNom());
         }
     };
@@ -117,5 +117,13 @@ public class VueCarte extends StackPane {
                 .then(b.multiply(getMinHeight()))
                 .otherwise(getMinHeight() * 0.4)
         );
+    }
+
+    public void creerLabelPileReserve() {
+        Label indicateur = new Label("0");
+        indicateur.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+        indicateur.setTextFill(Color.YELLOW);
+        indicateur.textProperty().bind(GestionJeu.getJeu().getTaillesPilesReserveProperties().get(carte.getNom()).asString());
+        getChildren().add(indicateur);
     }
 }

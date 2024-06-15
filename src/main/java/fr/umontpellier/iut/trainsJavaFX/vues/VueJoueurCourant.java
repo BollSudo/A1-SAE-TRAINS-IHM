@@ -74,7 +74,7 @@ public class VueJoueurCourant extends HBox {
             throw new RuntimeException(e);
         }
 
-        conteneurCartesEnJeu.setPrefWrapLength(VueDuJeu.LONGUEUR_ECRAN/2);
+        conteneurCartesEnJeu.setPrefWrapLength(VueDuJeu.LONGUEUR_ECRAN * 0.375);
         conteneurMainBottom.setPrefWidth(1000);
         creerCartes();
         creerListeners();

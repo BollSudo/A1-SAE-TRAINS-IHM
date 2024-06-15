@@ -4,6 +4,7 @@ import fr.umontpellier.iut.trainsJavaFX.IJeu;
 import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -11,10 +12,15 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 
 import java.io.IOException;
@@ -143,14 +149,16 @@ public class VueDuJeu extends GridPane {
 
     private void creerReserve() {
 
+        System.out.println(jeu.getReserve().size());
         int i = 0;
         int j = 0;
         for (Carte c : jeu.getReserve()) {
-            if (c!=null && !c.getNom().equals("Ferraille")) {
+            if (c!=null) {
                 VueCarte carte = new VueCarte(c);
                 carte.setCarteChoisieListener(carte.getHandlerCartesReserve());
                 carte.scale(0.7);
                 carte.createBindingsRatio();
+                carte.creerLabelPileReserve();
                 conteneurReserve.add(carte, i, j);
                 if (i<5) {
                     i++;
@@ -161,6 +169,8 @@ public class VueDuJeu extends GridPane {
             }
         }
     }
+
+
 
     public void createRatio() {
         ratioHauteurFenetre = new SimpleDoubleProperty();
