@@ -118,7 +118,7 @@ public class VueDuJeu extends GridPane {
         int i = 0;
         int j = 0;
         for (Carte c : jeu.getReserve()) {
-            if (c!=null) {
+            if (c!=null && !c.getNom().equals("Ferraille")) {
                 VueCarte carte = new VueCarte(c);
                 carte.setCarteChoisieListener(carte.getHandlerCartesReserve());
                 carte.scale(0.7);
