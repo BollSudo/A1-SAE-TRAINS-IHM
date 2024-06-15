@@ -120,6 +120,7 @@ public class VueDuJeu extends GridPane {
         for (Carte c : jeu.getReserve()) {
             if (c!=null) {
                 VueCarte carte = new VueCarte(c);
+                carte.setCarteChoisieListener(carte.getHandlerCartesReserve());
                 carte.scale(0.7);
                 conteneurReserve.add(carte, i, j);
                 if (i<5) {

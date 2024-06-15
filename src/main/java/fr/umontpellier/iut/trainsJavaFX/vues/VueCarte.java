@@ -2,6 +2,8 @@ package fr.umontpellier.iut.trainsJavaFX.vues;
 
 import fr.umontpellier.iut.trainsJavaFX.GestionJeu;
 import fr.umontpellier.iut.trainsJavaFX.ICarte;
+import fr.umontpellier.iut.trainsJavaFX.mecanique.Joueur;
+import fr.umontpellier.iut.trainsJavaFX.mecanique.etatsJoueur.tournormal.AchatCarte;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -57,7 +59,9 @@ public class VueCarte extends StackPane {
     EventHandler<MouseEvent> handlerCartesReserve = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-
+            AchatCarte achatCarte = new AchatCarte((Joueur) GestionJeu.getJeu().joueurCourantProperty().get());
+            achatCarte.carteEnReserveChoisie(carte.getNom());
+            System.out.println("ACHAT:" + carte.getNom());
         }
     };
 
@@ -67,9 +71,7 @@ public class VueCarte extends StackPane {
         return handlerCartesMain;
     }
 
-    public EventHandler<MouseEvent> getHandlerCartesReserve() {
-        return handlerCartesReserve;
-    }
+    public EventHandler<MouseEvent> getHandlerCartesReserve() { return handlerCartesReserve; }
 
     public ICarte getCarte() {
         return carte;
