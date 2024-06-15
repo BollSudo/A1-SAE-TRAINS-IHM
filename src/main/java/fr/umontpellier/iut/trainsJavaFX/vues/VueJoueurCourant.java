@@ -4,6 +4,7 @@ import fr.umontpellier.iut.trainsJavaFX.GestionJeu;
 import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.ListeDeCartes;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -18,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
@@ -53,7 +55,7 @@ public class VueJoueurCourant extends HBox {
     @FXML
     private Pane infoJoueurCourant;
     @FXML
-    private Pane conteneurCartesEnJeu;
+    private FlowPane conteneurCartesEnJeu;
     @FXML
     private Pane conteneurCartesRecues;
 
@@ -72,6 +74,7 @@ public class VueJoueurCourant extends HBox {
             throw new RuntimeException(e);
         }
 
+        conteneurCartesEnJeu.setPrefWrapLength(VueDuJeu.LONGUEUR_ECRAN/2);
         conteneurMainBottom.setPrefWidth(1000);
         creerCartes();
         creerListeners();
@@ -96,7 +99,7 @@ public class VueJoueurCourant extends HBox {
                     for (Carte carte : change.getAddedSubList()) {
                         VueCarte c = new VueCarte(carte);
                         c.scale(0.8);
-                        c.scale(0.8);
+                        c.createBindingsRatio();
                         c.setDisable(true);
                         conteneurCartesEnJeu.getChildren().add(c);
                     }
@@ -114,10 +117,10 @@ public class VueJoueurCourant extends HBox {
                     int translateXFactor = 5;
                     for (Carte carte : change.getAddedSubList()) {
                         VueCarte c = new VueCarte(carte);
-                        c.scale(0.8);
-                        c.scale(0.8);
+                        c.scale(0.9);
                         c.setDisable(true);
                         c.setTranslateX(j.cartesRecuesProperty().size()*translateXFactor);
+                        c.createBindingsRatio();
                         conteneurCartesRecues.getChildren().add(c);
                     }
                     for (Carte carte : change.getRemoved()) {
@@ -136,6 +139,8 @@ public class VueJoueurCourant extends HBox {
         labelNbPointsRails.textProperty().bind(joueurCourant.pointsRailsProperty().asString());
         labelNbArgent.textProperty().bind(joueurCourant.argentProperty().asString());
         labelNbJetonsRails.textProperty().bind(joueurCourant.nbJetonsRailsProperty().asString());
+        creerBindingsImagesCartesRatio(imageDeck, 0.5);
+        creerBindingsImagesCartesRatio(imageDefausse, 0.5);
     }
 
 
@@ -144,6 +149,7 @@ public class VueJoueurCourant extends HBox {
         for (int i = 0; i < mainJoueurCourrant.size(); i++) {
             VueCarte carte = new VueCarte(mainJoueurCourrant.get(i));
             carte.setCarteChoisieListener(carte.getHandlerCartesMain());
+            carte.createBindingsRatio();
             conteneurMainBottom.getChildren().add(carte);
         }
     }
@@ -189,5 +195,16 @@ public class VueJoueurCourant extends HBox {
 
     public Pane getInfoJoueurCourant() {
         return infoJoueurCourant;
+    }
+
+    private void creerBindingsImagesCartesRatio(ImageView imageView, double minRatio) {
+        imageView.fitWidthProperty().bind(Bindings.when(VueDuJeu.ratioResolutionFenetreProperty().greaterThan(minRatio))
+                .then(VueDuJeu.ratioResolutionFenetreProperty().multiply(VueCarte.LONGUEUR_INIT))
+                .otherwise(VueCarte.LONGUEUR_INIT * minRatio)
+        );
+        imageView.fitHeightProperty().bind(Bindings.when(VueDuJeu.ratioResolutionFenetreProperty().greaterThan(minRatio))
+                .then(VueDuJeu.ratioResolutionFenetreProperty().multiply(VueCarte.HAUTEUR_INIT))
+                .otherwise(VueCarte.HAUTEUR_INIT * minRatio)
+        );
     }
 }

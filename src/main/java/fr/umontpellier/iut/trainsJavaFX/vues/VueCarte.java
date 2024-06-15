@@ -2,10 +2,14 @@ package fr.umontpellier.iut.trainsJavaFX.vues;
 
 import fr.umontpellier.iut.trainsJavaFX.GestionJeu;
 import fr.umontpellier.iut.trainsJavaFX.ICarte;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.Joueur;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.etatsJoueur.tournormal.AchatCarte;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
@@ -19,15 +23,22 @@ import java.text.Normalizer;
 public class VueCarte extends StackPane {
     private final ICarte carte;
 
+    public static double LONGUEUR_INIT = VueDuJeu.LONGUEUR_ECRAN * 113.75 / 1280.0;
+    public static double HAUTEUR_INIT = VueDuJeu.HAUTEUR_ECRAN * 151.25 / 800.0;
+
     public VueCarte(ICarte carte) {
         this.carte = carte;
         //Aspact ratoi 2:3
 
+        //base 375x525
         //HBox.setHgrow(this, Priority.ALWAYS);
-        setMinHeight(150);
-        setMinWidth(90);
+        setMinWidth(LONGUEUR_INIT);
+        setMinHeight(HAUTEUR_INIT);
+        setMaxWidth(LONGUEUR_INIT);
+        setMaxHeight(HAUTEUR_INIT);
 
-        setScaleX(1.1);
+
+        //setScaleX(1.1);
         setOnMouseEntered((event) -> setScaleY(1.2));
         setOnMouseExited((event) -> setScaleY(1));
 
@@ -44,6 +55,8 @@ public class VueCarte extends StackPane {
     public void scale(double scaleFactor) {
         setMinHeight(getMinHeight()*scaleFactor);
         setMinWidth(getMinWidth()*scaleFactor);
+        setMaxHeight(getMaxHeight()*scaleFactor);
+        setMaxWidth(getMaxWidth()*scaleFactor);
     }
 
     //HANDLERS ============================================================================
@@ -81,5 +94,28 @@ public class VueCarte extends StackPane {
 
     public void setCarteChoisieListener(EventHandler<MouseEvent> quandCarteEstChoisie) {
         setOnMouseClicked(quandCarteEstChoisie);
+    }
+
+
+    //BINDINGS RATIO
+
+    public void createBindingsRatio() {
+        DoubleProperty b = VueDuJeu.ratioResolutionFenetreProperty();
+        minWidthProperty().bind(Bindings.when(b.greaterThan(0.4))
+                        .then(b.multiply(getMinWidth()))
+                        .otherwise(getMinWidth() * 0.4)
+                );
+        maxWidthProperty().bind(Bindings.when(b.greaterThan(0.4))
+                .then(b.multiply(getMinWidth()))
+                .otherwise(getMinWidth() * 0.4)
+        );
+        minHeightProperty().bind(Bindings.when(b.greaterThan(0.4))
+                .then(b.multiply(getMinHeight()))
+                .otherwise(getMinHeight() * 0.4)
+        );
+        maxHeightProperty().bind(Bindings.when(b.greaterThan(0.4))
+                .then(b.multiply(getMinHeight()))
+                .otherwise(getMinHeight() * 0.4)
+        );
     }
 }

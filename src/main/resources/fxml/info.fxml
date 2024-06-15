@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="infoJoueurCourant" fillWidth="false" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="infoJoueurCourant" fillWidth="false" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER_LEFT">
          <children>
@@ -14,6 +14,6 @@
             <Label text="Cartes En Jeu" />
          </children>
       </HBox>
-      <FlowPane fx:id="conteneurCartesEnJeu" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" />
+      <FlowPane fx:id="conteneurCartesEnJeu" prefWrapLength="800.0" style="-fx-background-color: red;" VBox.vgrow="ALWAYS" />
    </children>
 </VBox>
