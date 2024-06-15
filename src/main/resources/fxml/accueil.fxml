@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/logoTrains.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+         <children>
+            <VBox alignment="CENTER" spacing="5.0">
+               <children>
+                  <Label text="Selectionnez le nombre de joueurs">
+                     <font>
+                        <Font name="Monospaced Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <HBox fx:id="conteneurBoutons" alignment="CENTER" spacing="20.0">
+                     <children>
+                        <ImageView fx:id="boutonDeux" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/boutons/2player.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="boutonTrois" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/boutons/3player.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="boutonQuatre" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/boutons/4player.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <VBox fx:id="conteneurInputs" alignment="CENTER" minHeight="150.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label text="Player 1 : " />
+                        <TextField promptText="Rick" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
+                     <children>
+                        <Label text="Player 2 : " />
+                        <TextField promptText="Astley" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+         <children>
+            <VBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Label text="Choisissez le plateau">
+                     <font>
+                        <Font name="Monospaced Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" spacing="30.0">
+                     <children>
+                        <Button fx:id="boutonOsaka" mnemonicParsing="false" style="-fx-background-color: rgba(144,204,25,0.79); -fx-background-radius: 24; -fx-border-color: grey; -fx-border-radius: 12; -fx-border-width: 3;" text="OSAKA" />
+                        <Button fx:id="boutonTokyo" layoutX="64.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: rgba(206,206,206,0.6); -fx-background-radius: 24; -fx-border-color: grey; -fx-border-radius: 12; -fx-border-width: 3;" text="TOKYO" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="402.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+         <children>
+            <VBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <HBox alignment="CENTER" spacing="30.0">
+                     <children>
+                        <Button fx:id="boutonStart" mnemonicParsing="false" text="Démarrer le train" />
+                     </children>
+                  </HBox>
+                  <Label fx:id="errorMessage" style="-fx-text-fill: red;" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>
