@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -69,6 +70,7 @@ public class TrainsIHM extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Trains");
+        primaryStage.getIcons().add(new Image("images/icons/favicon.jpg"));
         primaryStage.centerOnScreen();
         primaryStage.setOnCloseRequest(event -> {
             this.arreterJeu();

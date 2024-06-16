@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root prefHeight="400.0" prefWidth="600.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="CENTER" layoutY="1.0" prefHeight="400.0" prefWidth="600.0" spacing="10.0">
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <children>
+            <ImageView fx:id="imageVictoire" fitHeight="150.0" fitWidth="565.0" pickOnBounds="true" preserveRatio="true" />
+            <HBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER">
+               <children>
+                  <Label fx:id="nomGagnant" alignment="CENTER_RIGHT" contentDisplay="CENTER" text="nomGagnant" />
+                  <Label fx:id="texteVictoire" alignment="CENTER_LEFT" contentDisplay="CENTER" text=" à gagner, bien jouer tu as été plus efficace que la SNCF !" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</fx:root>
