@@ -68,7 +68,6 @@ public class TrainsIHM extends Application {
         vueDuJeu.creerBindings();
         jeu.run(); // le jeu doit être démarré après que les bindings ont été mis en place
 
-        VueResultats vueResultats = new VueResultats(this);
         jeu.finDePartieProperty().addListener(((observableValue, aBoolean, t1) -> {
             if (t1) {afficherResultatsJeu();}
         }));
@@ -105,6 +104,8 @@ public class TrainsIHM extends Application {
     }
 
     public void afficherResultatsJeu() {
+        VueResultats vueResultats = new VueResultats(this);
+        getPrimaryStage().setScene(new Scene(vueResultats));
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("RESULTATS");
         alert.setContentText("On arrête de jouer ?");

@@ -58,12 +58,9 @@ public class VueDuJeu extends GridPane {
     private VuePlateau plateau;
     private Popup fin;
     private GridPane conteneurReserve;
-    private GridPane fenetre = this;
     private VueJoueurCourant vueJoueurCourant;
-
     private VueAutresJoueurs vueAutresJoueurs;
     private Pane conteneurInstruction;
-
     private ImageView boutonArgent;
 
     private static StackPane conteneurPlateau;
@@ -95,17 +92,11 @@ public class VueDuJeu extends GridPane {
         conteneurReserve.setStyle("-fx-background-color: rgb(255,255,255,0.4)");
         ColumnConstraints colUne = new ColumnConstraints();
         colUne.setMinWidth(0.08681 * LONGUEUR_ECRAN);
-//        ColumnConstraints colDeux = new ColumnConstraints();
-//        colUne.setPercentWidth(70);
-//        colDeux.setPercentWidth(30);
         getColumnConstraints().addAll(colUne);
 
         RowConstraints rowDeux = new RowConstraints();
         rowDeux.setMinHeight(0.1 * HAUTEUR_ECRAN);
         getRowConstraints().addAll(new RowConstraints(), new RowConstraints(), rowDeux);
-
-        fin = new Popup();
-        fin.getContent().add(new VueFinDePartie(getTableauScore().get(0)));
 
         conteneurPlateau = new StackPane();
         conteneurPlateau.setStyle("-fx-background-color: rgba(255,255,255,0.4)");
@@ -170,12 +161,12 @@ public class VueDuJeu extends GridPane {
             jeu.joueurCourantProperty().getValue().recevoirArgentAEteChoisi();
             System.out.println("Recevoir argent a été choisi");
         });
-        getJeu().finDePartieProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                fin.show(fenetre, 1, 1);
-            }
-        });
+//        getJeu().finDePartieProperty().addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+//                fin.show(fenetre, 1, 1);
+//            }
+//        });
     }
 
     public void afficherCInformation() {
