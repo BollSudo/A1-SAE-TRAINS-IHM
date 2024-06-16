@@ -66,11 +66,7 @@ public class VueCarte extends StackPane {
             switch (carte.getNom()) {
                 case "Centre de renseignements" ->  devoilerCartesAChoisir(true);
                 case "Feu de signalisation" -> devoilerCartesAChoisir(false);
-                case "Centre de contrôle" -> {
-                    actionCentreDeControle();
-
-                }
-
+                case "Centre de contrôle" -> actionCentreDeControle();
             }
         }
     };

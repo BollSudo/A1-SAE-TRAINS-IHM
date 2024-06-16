@@ -98,7 +98,7 @@ public class VueJoueurCourant extends HBox {
         createLabelArgent();
         conteneurCartesEnJeu.setPrefWrapLength(VueDuJeu.LONGUEUR_ECRAN * 0.375);
         conteneurMainBottom.setPrefWidth(1000);
-        desactiverBoutonsDeckDefausse();
+        setEffectBoutonsDeckDefausse();
         creerCartes();
         creerListeners();
         createBindings();
@@ -129,9 +129,6 @@ public class VueJoueurCourant extends HBox {
                     for (Carte carte : change.getAddedSubList()) {
                         //speciale:
                         switch (carte.getNom()) {
-                            case "Feu de signalisation" -> {
-                                activerBoutonsDeckDefausse();
-                            }
                             case "Centre de renseignements" -> {
                                 boutonPasser.setOnMouseClicked(actionPasserCentreDeRenseignement);
                                 boutonPasser.disableProperty().bind(new ObjectBinding<Boolean>() {
@@ -273,25 +270,23 @@ public class VueJoueurCourant extends HBox {
             joueurCourant.laDefausseAEteChoisie();
             VueCarte.resetCartesDevoilees();
             System.out.println("La défausse a été choisie");
-            desactiverBoutonsDeckDefausse();
         });
         imageDeck.setOnMouseClicked(mouseEvent -> {
             joueurCourant.laPiocheAEteChoisie();
             VueCarte.resetCartesDevoilees();
             System.out.println("La pioche a été choisie");
-            desactiverBoutonsDeckDefausse();
         });
+        imageDefausse.setOnMouseEntered(mouseEvent -> imageDefausse.setEffect(null));
+        imageDefausse.setOnMouseExited(mouseEvent -> imageDefausse.setEffect(new Lighting()));
+        imageDeck.setOnMouseEntered(mouseEvent -> imageDeck.setEffect(null));
+        imageDeck.setOnMouseExited(mouseEvent -> imageDeck.setEffect(new Lighting()));
     }
-    private void desactiverBoutonsDeckDefausse() {
-        imageDeck.setDisable(true);
+    private void setEffectBoutonsDeckDefausse() {
         imageDeck.setEffect(new Lighting());
-        imageDefausse.setDisable(true);
         imageDefausse.setEffect(new Lighting());
     }
-    private void activerBoutonsDeckDefausse() {
-        imageDeck.setDisable(false);
-        imageDeck.setEffect(null);
-        imageDefausse.setDisable(false);
+    private void activerBoutonsDefausse() {
+        //imageDefausse.setDisable(false);
         imageDefausse.setEffect(null);
     }
     private void createLabelArgent() {
