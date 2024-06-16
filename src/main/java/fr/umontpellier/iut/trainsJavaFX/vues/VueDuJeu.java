@@ -56,7 +56,6 @@ public class VueDuJeu extends GridPane {
 
     private final IJeu jeu;
     private VuePlateau plateau;
-    private Popup fin;
     private GridPane conteneurReserve;
     private VueJoueurCourant vueJoueurCourant;
     private VueAutresJoueurs vueAutresJoueurs;
@@ -102,7 +101,6 @@ public class VueDuJeu extends GridPane {
         conteneurPlateau.setStyle("-fx-background-color: rgba(255,255,255,0.4)");
         VueCarte.creerZoneAffichageZoom(conteneurPlateau);
         VueCarte.creerZoneAffichageDevoilee(conteneurPlateau);
-        conteneurPlateau.setStyle("-fx-background-color: #722222");
         conteneurPlateau.getChildren().add(plateau);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/top.fxml"));
@@ -123,21 +121,6 @@ public class VueDuJeu extends GridPane {
         creerListeners();
     }
 
-
-    private ArrayList<String> getTableauScore(){
-        PriorityQueue<IJoueur> pq = new PriorityQueue<>(new Comparator<IJoueur>() {
-            @Override
-            public int compare(IJoueur o1, IJoueur o2) {
-                return o1.getScoreTotal() - o2.getScoreTotal();
-            }
-        });
-        pq.addAll(GestionJeu.getJeu().getJoueurs());
-        ArrayList<String> tableauScore = new ArrayList<>();
-        while (!pq.isEmpty()){
-            tableauScore.add(pq.poll().getNom());
-        }
-        return tableauScore;
-    }
 
     private void creerListeners() {
         logoInfo.setOnMouseClicked(mouseEvent -> afficherCInformation());

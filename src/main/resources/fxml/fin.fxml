@@ -1,22 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<fx:root prefHeight="400.0" prefWidth="600.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root prefHeight="400.0" prefWidth="600.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" layoutY="1.0" prefHeight="400.0" prefWidth="600.0" spacing="10.0">
-         <padding>
-            <Insets top="10.0" />
-         </padding>
+      <VBox fx:id="arriver" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="2.0">
          <children>
-            <ImageView fx:id="imageVictoire" fitHeight="150.0" fitWidth="565.0" pickOnBounds="true" preserveRatio="true" />
-            <HBox prefHeight="100.0" prefWidth="200.0" alignment="CENTER">
+            <HBox fx:id="titre" prefHeight="117.0" prefWidth="600.0">
                <children>
+                  <Label fx:id="labelTitre" alignment="CENTER" prefHeight="80.0" prefWidth="602.0" text="Tableau des scores" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children></HBox>
+            <HBox fx:id="ligne1" alignment="CENTER" prefHeight="37.0" prefWidth="600.0">
+               <children>
+                  <ImageView fx:id="imageVictoire" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="texteVictoire" alignment="CENTER_LEFT" contentDisplay="CENTER" text=" score " />
                   <Label fx:id="nomGagnant" alignment="CENTER_RIGHT" contentDisplay="CENTER" text="nomGagnant" />
-                  <Label fx:id="texteVictoire" alignment="CENTER_LEFT" contentDisplay="CENTER" text=" à gagner, bien jouer tu as été plus efficace que la SNCF !" />
+               </children>
+            </HBox>
+            <HBox fx:id="ligne2" alignment="CENTER" prefHeight="42.0" prefWidth="600.0">
+               <children>
+                  <ImageView fx:id="image2" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="texte2" alignment="CENTER_LEFT" contentDisplay="CENTER" text=" score " />
+                  <Label fx:id="nom2" alignment="CENTER_RIGHT" contentDisplay="CENTER" text="nomSecond" />
+               </children>
+            </HBox>
+            <HBox fx:id="ligne3" alignment="CENTER" prefHeight="47.0" prefWidth="600.0">
+               <children>
+                  <ImageView fx:id="image3" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="texte3" alignment="CENTER_LEFT" contentDisplay="CENTER" text=" score " />
+                  <Label fx:id="nom3" alignment="CENTER_RIGHT" contentDisplay="CENTER" text="nomGagnant" />
+               </children>
+            </HBox>
+            <HBox fx:id="ligneD" alignment="CENTER" prefHeight="0.0" prefWidth="600.0">
+               <children>
+                  <ImageView fx:id="imageD" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="texteD" alignment="CENTER_LEFT" contentDisplay="CENTER" text=" score " />
+                  <Label fx:id="nomD" alignment="CENTER_RIGHT" contentDisplay="CENTER" text="nomGagnant" />
                </children>
             </HBox>
          </children>
