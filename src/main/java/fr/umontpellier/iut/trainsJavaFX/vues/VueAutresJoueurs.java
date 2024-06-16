@@ -63,7 +63,7 @@ public class VueAutresJoueurs extends VBox {
     VueUnAutreJoueur infoJoueurCourant;
     HBox infoTurnOrder;
     public VueAutresJoueurs() {
-        setStyle("-fx-background-color: black");
+        setStyle("-fx-background-color: rgb(255,255,255, 0.4)");
         setAlignment(Pos.TOP_CENTER);
         infosAutresJoueurs = new ArrayList<>();
         for (IJoueur joueur : GestionJeu.getJeu().getJoueurs()) {

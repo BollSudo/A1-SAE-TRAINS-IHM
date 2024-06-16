@@ -1,6 +1,7 @@
 package fr.umontpellier.iut.trainsJavaFX.vues;
 
 import fr.umontpellier.iut.trainsJavaFX.GestionJeu;
+import fr.umontpellier.iut.trainsJavaFX.ICarte;
 import fr.umontpellier.iut.trainsJavaFX.IJeu;
 import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
@@ -20,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -69,12 +71,15 @@ public class VueDuJeu extends GridPane {
     private Button boutonPasser;
 
     public VueDuJeu(IJeu jeu) {
+        Image image  = new Image("images/fond/fond.png");
+        this.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(1, 1, true, true, false,false))));
         createRatio();
         this.jeu = jeu;
         plateau = new VuePlateau();
         vueJoueurCourant = new VueJoueurCourant(jeu.joueurCourantProperty().get());
         vueAutresJoueurs = new VueAutresJoueurs();
         conteneurReserve = new GridPane();
+        conteneurReserve.setStyle("-fx-background-color: rgb(255,255,255,0.4)");
         ColumnConstraints colUne = new ColumnConstraints();
         colUne.setMinWidth(0.08681 * LONGUEUR_ECRAN);
         // ColumnConstraints colDeux = new ColumnConstraints();
@@ -90,7 +95,7 @@ public class VueDuJeu extends GridPane {
         fin.getContent().add(new VueFinDePartie(getTableauScore().get(0)));
 
         VBox conteneurPlateau = new VBox();
-        conteneurPlateau.setStyle("-fx-background-color: #252424");
+        conteneurPlateau.setStyle("-fx-background-color: rgba(255,255,255,0.4)");
         conteneurPlateau.getChildren().add(plateau);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/top.fxml"));

@@ -26,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -63,7 +64,9 @@ public class VueJoueurCourant extends HBox {
     private Pane conteneurCartesRecues;
 
     public VueJoueurCourant(IJoueur joueur) {
+
         joueurCourant = joueur;
+        this.setStyle("-fx-background-color: rgba(227,186,142,0.8)");
         joueurCourantProperty = new SimpleObjectProperty<>(joueur);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/main.fxml"));
