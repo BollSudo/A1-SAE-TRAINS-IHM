@@ -24,6 +24,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -62,6 +63,8 @@ public class VueDuJeu extends GridPane {
 
     private VueAutresJoueurs vueAutresJoueurs;
     private Pane conteneurInstruction;
+
+    private ImageView boutonArgent;
 
     private static StackPane conteneurPlateau;
 
@@ -163,6 +166,10 @@ public class VueDuJeu extends GridPane {
             logoInfo.setScaleX(1);
             logoInfo.setScaleY(1);
         }));
+        boutonArgent.setOnMouseClicked(mouseEvent -> {
+            jeu.joueurCourantProperty().getValue().recevoirArgentAEteChoisi();
+            System.out.println("Recevoir argent a été choisi");
+        });
         getJeu().finDePartieProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
@@ -221,7 +228,6 @@ public class VueDuJeu extends GridPane {
 
         vueJoueurCourant.getNomJoueurCourant().textProperty().bind(nomJoueurCourant.textProperty());
         vueJoueurCourant.getNomJoueurCourant().styleProperty().bind(nomJoueurCourant.styleProperty());
-
     }
 
     public IJeu getJeu() {
@@ -249,6 +255,20 @@ public class VueDuJeu extends GridPane {
                 }
             }
         }
+
+
+        conteneurReserve.add(creerBoutonArgent() ,i+1, j);
+    }
+
+    private StackPane creerBoutonArgent() {
+        StackPane p = new StackPane();
+        boutonArgent = new ImageView();
+        boutonArgent.setFitWidth(50);
+        boutonArgent.setFitHeight(50);
+        boutonArgent.setImage(new Image("images/boutons/coins.png"));
+
+        p.getChildren().addAll(boutonArgent, vueJoueurCourant.getLabelNbArgentBig());
+        return p;
     }
 
 
@@ -264,4 +284,5 @@ public class VueDuJeu extends GridPane {
     public static DoubleProperty ratioResolutionFenetreProperty() {
         return ratioResolutionFenetre;
     }
+
 }

@@ -29,6 +29,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 import java.awt.*;
 import java.io.IOException;
@@ -40,9 +41,9 @@ import java.io.IOException;
  */
 public class VueJoueurCourant extends HBox {
 
-    IJoueur joueurCourant;
+    private IJoueur joueurCourant;
 
-    ObjectProperty<IJoueur> joueurCourantProperty;
+    private ObjectProperty<IJoueur> joueurCourantProperty;
 
     @FXML
     private HBox conteneurMainBottom;
@@ -81,6 +82,8 @@ public class VueJoueurCourant extends HBox {
     @FXML
     private Label nomJoueurCourant;
 
+    private  Label labelNbArgentBig;
+
 
     private ObservableList<Carte> cartesDevoilees;
 
@@ -102,6 +105,7 @@ public class VueJoueurCourant extends HBox {
             e.printStackTrace();
         }
 
+        createLabelArgent();
         conteneurCartesEnJeu.setPrefWrapLength(VueDuJeu.LONGUEUR_ECRAN * 0.375);
         conteneurMainBottom.setPrefWidth(1000);
         desactiverBoutonsDeckDefausse();
@@ -194,6 +198,7 @@ public class VueJoueurCourant extends HBox {
         labelNbPointsRails.textProperty().bind(joueurCourant.pointsRailsProperty().asString());
         labelNbArgent.textProperty().bind(joueurCourant.argentProperty().asString());
         labelNbJetonsRails.textProperty().bind(joueurCourant.nbJetonsRailsProperty().asString());
+        labelNbArgentBig.textProperty().bind(joueurCourant.argentProperty().asString());
 
         labelNbCartesPioche.textProperty().bind(new StringBinding() {
             {
@@ -324,4 +329,22 @@ public class VueJoueurCourant extends HBox {
     public Label getNomJoueurCourant() {
         return nomJoueurCourant;
     }
+
+    public IJoueur getJoueurCourant() {
+        return joueurCourantProperty.get();
+    }
+
+    public ObjectProperty<IJoueur> joueurCourantProperty() {
+        return joueurCourantProperty;
+    }
+
+    private void createLabelArgent() {
+        labelNbArgentBig = new Label("0");
+        labelNbArgentBig.setFont(new Font("Oswald", 20));
+    }
+
+    public Label getLabelNbArgentBig() {
+        return labelNbArgentBig;
+    }
+
 }

@@ -110,13 +110,11 @@ public class VueAutresJoueurs extends VBox {
         GestionJeu.getJeu().joueurCourantProperty().addListener((obs, ancien, nouveau) -> {
             afficher();
         });
+
     }
 
     public static void addZoneCarteDevoilee(StackPane pane) {
         zoneCarteDevoilee.getChildren().add(pane);
     }
 
-    public static void resetCarteDevoille() {
-        zoneCarteDevoilee.getChildren().clear();
-    }
 }
