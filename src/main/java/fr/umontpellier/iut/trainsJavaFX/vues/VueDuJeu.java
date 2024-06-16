@@ -58,6 +58,8 @@ public class VueDuJeu extends GridPane {
     private VueAutresJoueurs vueAutresJoueurs;
     private Pane conteneurInstruction;
 
+    private static StackPane conteneurPlateau;
+
 
     public static final double HAUTEUR_ECRAN = Screen.getPrimary().getBounds().getHeight();
     public static final double LONGUEUR_ECRAN = Screen.getPrimary().getBounds().getWidth();
@@ -94,8 +96,9 @@ public class VueDuJeu extends GridPane {
         fin = new Popup();
         fin.getContent().add(new VueFinDePartie(getTableauScore().get(0)));
 
-        VBox conteneurPlateau = new VBox();
+        conteneurPlateau = new StackPane();
         conteneurPlateau.setStyle("-fx-background-color: rgba(255,255,255,0.4)");
+        VueCarte.creerZoneAffichageZoom(conteneurPlateau);
         conteneurPlateau.getChildren().add(plateau);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/top.fxml"));
@@ -106,7 +109,7 @@ public class VueDuJeu extends GridPane {
         }
 
         add(conteneurInstruction, 0, 0, 3, 1);
-        add(conteneurPlateau, 1, 1, 1, 2);
+        add(new VBox(conteneurPlateau), 1, 1, 1, 2);
         add(vueJoueurCourant.getInfoJoueurCourant(), 2, 2);
         add(vueJoueurCourant, 0, 3, 3, 1);
         add(conteneurReserve, 2, 1);
@@ -185,6 +188,10 @@ public class VueDuJeu extends GridPane {
         return jeu;
     }
 
+    public static StackPane getConteneurPlateau() {
+        return conteneurPlateau;
+    }
+
     EventHandler<? super MouseEvent> actionPasserParDefaut = (mouseEvent) -> {
         System.out.println("Passer a été demandé");
         getJeu().passerAEteChoisi();
@@ -200,8 +207,9 @@ public class VueDuJeu extends GridPane {
             if (c!=null) {
                 VueCarte carte = new VueCarte(c);
                 carte.setCarteChoisieListener(carte.getHandlerCartesReserve());
+                carte.setCarteHover(1.2, -1);
                 carte.scale(0.7);
-                carte.createBindingsRatio();
+                carte.createBindingsRatio(0.4);
                 carte.creerLabelPileReserve();
                 conteneurReserve.add(carte, i, j);
                 if (i<5) {

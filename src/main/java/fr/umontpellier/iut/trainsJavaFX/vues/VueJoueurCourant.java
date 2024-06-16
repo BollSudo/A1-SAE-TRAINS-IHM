@@ -106,7 +106,7 @@ public class VueJoueurCourant extends HBox {
                         VueCarte c = new VueCarte(carte);
                         c.scale(0.7);
                         c.createBindingsRatio();
-                        c.setDisable(true);
+                        c.setCarteHover(1.0, 0);
                         conteneurCartesEnJeu.getChildren().add(c);
                     }
                     for (Carte carte : change.getRemoved()) {
@@ -120,10 +120,10 @@ public class VueJoueurCourant extends HBox {
 
             j.cartesRecuesProperty().addListener((ListChangeListener<Carte>) change -> {
                 while (change.next()) {
-                    int translateXFactor = 5;
+                    int translateXFactor = 10;
                     for (Carte carte : change.getAddedSubList()) {
                         VueCarte c = new VueCarte(carte);
-                        c.setDisable(true);
+                        c.setCarteHover(1.0, 0);
                         c.setTranslateX(j.cartesRecuesProperty().size()*translateXFactor);
                         c.createBindingsRatio();
                         conteneurCartesRecues.getChildren().add(c);
@@ -154,6 +154,7 @@ public class VueJoueurCourant extends HBox {
         for (int i = 0; i < mainJoueurCourrant.size(); i++) {
             VueCarte carte = new VueCarte(mainJoueurCourrant.get(i));
             carte.setCarteChoisieListener(carte.getHandlerCartesMain());
+            carte.setCarteHover(1.2, -1);
             carte.createBindingsRatio();
             conteneurMainBottom.getChildren().add(carte);
         }

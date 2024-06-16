@@ -6,6 +6,9 @@ import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -26,6 +29,7 @@ public class VueCarte extends StackPane {
 
     public static double LONGUEUR_INIT = VueDuJeu.LONGUEUR_ECRAN * 113.75 / 1280.0;
     public static double HAUTEUR_INIT = VueDuJeu.HAUTEUR_ECRAN * 151.25 / 800.0;
+    private static VueCarte zoneAffichage;
 
     public VueCarte(ICarte carte) {
         this.carte = carte;
@@ -40,19 +44,8 @@ public class VueCarte extends StackPane {
 
 
         //setScaleX(1.1);
-        setOnMouseEntered((event) -> {
-            setScaleX(1.2);
-            setScaleY(1.2);
-            setViewOrder(-1);
-        });
-        setOnMouseExited((event) -> {
-            setScaleX(1);
-            setScaleY(1);
-            setViewOrder(0);
-        });
-
         Image image = new Image(nomCarteValide(carte.getNom()));
-        this.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(1, 1, true, true, false,false))));
+        setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(1, 1, true, true, false,false))));
     }
 
     private String nomCarteValide(String carte){
@@ -104,6 +97,24 @@ public class VueCarte extends StackPane {
         setOnMouseClicked(quandCarteEstChoisie);
     }
 
+    public void setCarteHover(double scaleZoom, int viewOrderOnHover) {
+        setOnMouseEntered((event) -> {
+            setScaleX(scaleZoom);
+            setScaleY(scaleZoom);
+            setViewOrder(viewOrderOnHover);
+            creerApercuZoomCarte();
+            zoneAffichage.setViewOrder(-1);
+        });
+        setOnMouseExited((event) -> {
+            setScaleX(1);
+            setScaleY(1);
+            setViewOrder(0);
+            zoneAffichage.setBackground(null);
+            zoneAffichage.setViewOrder(99);
+        });
+    }
+
+
 
     //BINDINGS RATIO
 
@@ -133,5 +144,23 @@ public class VueCarte extends StackPane {
         indicateur.setTextFill(Color.YELLOW);
         indicateur.textProperty().bind(GestionJeu.getJeu().getTaillesPilesReserveProperties().get(carte.getNom()).asString());
         getChildren().add(indicateur);
+    }
+
+    private void creerApercuZoomCarte() {
+        zoneAffichage.setBackground(new Background(
+                new BackgroundImage(new Image(nomCarteValide(carte.getNom())),
+                        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                        new BackgroundSize(1, 1, true, true, false,false))));
+    }
+
+    public static void creerZoneAffichageZoom(StackPane pane) {
+        VueCarte v = new VueCarte(GestionJeu.getJeu().getReserve().get(0));
+        v.scale(2.5);
+        v.createBindingsRatio();
+        v.setBackground(null);
+        zoneAffichage = v;
+        pane.getChildren().add(zoneAffichage);
+        StackPane.setAlignment(zoneAffichage, Pos.TOP_LEFT);
+        StackPane.setMargin(zoneAffichage, new Insets(10));
     }
 }
