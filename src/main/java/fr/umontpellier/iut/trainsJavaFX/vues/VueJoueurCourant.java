@@ -5,20 +5,23 @@ import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.ListeDeCartes;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Glow;
+import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -79,6 +82,8 @@ public class VueJoueurCourant extends HBox {
     private Label nomJoueurCourant;
 
 
+    private ObservableList<Carte> cartesDevoilees;
+
 
     public VueJoueurCourant(IJoueur joueur) {
 
@@ -99,6 +104,7 @@ public class VueJoueurCourant extends HBox {
 
         conteneurCartesEnJeu.setPrefWrapLength(VueDuJeu.LONGUEUR_ECRAN * 0.375);
         conteneurMainBottom.setPrefWidth(1000);
+        desactiverBoutonsDeckDefausse();
         creerCartes();
         creerListeners();
         createBindings();
@@ -112,7 +118,7 @@ public class VueJoueurCourant extends HBox {
                         VueCarte c = new VueCarte(carte);
                         c.setCarteChoisieListener(c.getHandlerCartesMain());
                         c.setCarteHover(1.2, -1);
-                        c.createBindingsRatio();
+                        c.createBindingsRatio(0.4);
                         conteneurMainBottom.getChildren().add(c);
                     }
                     for (Carte carte : change.getRemoved()) {
@@ -127,9 +133,29 @@ public class VueJoueurCourant extends HBox {
             j.cartesEnJeuProperty().addListener((ListChangeListener<Carte>) change -> {
                 while (change.next()) {
                     for (Carte carte : change.getAddedSubList()) {
+                        //speciale:
+                        switch (carte.getNom()) {
+                            case "Feu de signalisation" -> {
+                                activerBoutonsDeckDefausse();
+                            }
+                            case "Centre de renseignements" -> {
+                                boutonPasser.setOnMouseClicked(actionPasserCentreDeRenseignement);
+                                boutonPasser.disableProperty().bind(new ObjectBinding<Boolean>() {
+                                    {
+                                        super.bind(VueCarte.getZoneAffichageCarteDevoilee().getChildren());
+                                    }
+                                    @Override
+                                    protected Boolean computeValue() {
+                                        return VueCarte.getZoneAffichageCarteDevoilee().getChildren().size() < 4
+                                                && !VueCarte.getZoneAffichageCarteDevoilee().getChildren().isEmpty();
+                                    }
+                                });
+                            }
+                        }
+                        //creation de la vueCarte
                         VueCarte c = new VueCarte(carte);
                         c.scale(0.7);
-                        c.createBindingsRatio();
+                        c.createBindingsRatio(0.4);
                         c.setCarteHover(1.0, 0);
                         c.setCarteChoisieListener(c.getHandlerCarteEnJeu());
                         conteneurCartesEnJeu.getChildren().add(c);
@@ -150,7 +176,7 @@ public class VueJoueurCourant extends HBox {
                         VueCarte c = new VueCarte(carte);
                         c.setCarteHover(1.0, 0);
                         c.setTranslateX(j.cartesRecuesProperty().size()*translateXFactor);
-                        c.createBindingsRatio();
+                        c.createBindingsRatio(0.4);
                         conteneurCartesRecues.getChildren().add(c);
                     }
                     for (Carte carte : change.getRemoved()) {
@@ -161,7 +187,6 @@ public class VueJoueurCourant extends HBox {
                     }
                 }
             });
-
         }
     }
 
@@ -200,7 +225,7 @@ public class VueJoueurCourant extends HBox {
             VueCarte carte = new VueCarte(mainJoueurCourrant.get(i));
             carte.setCarteChoisieListener(carte.getHandlerCartesMain());
             carte.setCarteHover(1.2, -1);
-            carte.createBindingsRatio();
+            carte.createBindingsRatio(0.4);
             conteneurMainBottom.getChildren().add(carte);
         }
     }
@@ -225,6 +250,7 @@ public class VueJoueurCourant extends HBox {
                 conteneurMainBottom.getChildren().clear();
                 creerCartes();
                 createBindings();
+                VueCarte.resetCartesDevoilees();
                 logoJetonsRails.setImage(new Image("images/icons/cube_".concat(CouleursJoueurs.getNomCouleurPratique(joueurCourant)).concat(".png")));
             }
         });
@@ -238,19 +264,44 @@ public class VueJoueurCourant extends HBox {
 
         imageDefausse.setOnMouseClicked(mouseEvent -> {
             joueurCourant.laDefausseAEteChoisie();
-            VueAutresJoueurs.resetCarteDevoille();
+            VueCarte.resetCartesDevoilees();
             System.out.println("La défausse a été choisie");
+            desactiverBoutonsDeckDefausse();
         });
         imageDeck.setOnMouseClicked(mouseEvent -> {
             joueurCourant.laPiocheAEteChoisie();
-            VueAutresJoueurs.resetCarteDevoille();
+            VueCarte.resetCartesDevoilees();
             System.out.println("La pioche a été choisie");
+            desactiverBoutonsDeckDefausse();
         });
+    }
+
+    private void desactiverBoutonsDeckDefausse() {
+        imageDeck.setDisable(true);
+        imageDeck.setEffect(new Lighting());
+        imageDefausse.setDisable(true);
+        imageDefausse.setEffect(new Lighting());
+    }
+
+    private void activerBoutonsDeckDefausse() {
+        imageDeck.setDisable(false);
+        imageDeck.setEffect(null);
+        imageDefausse.setDisable(false);
+        imageDefausse.setEffect(null);
     }
 
     EventHandler<? super MouseEvent> actionPasserParDefaut = (mouseEvent) -> {
         System.out.println("Passer a été demandé");
         GestionJeu.getJeu().passerAEteChoisi();
+    };
+
+    EventHandler<? super MouseEvent> actionPasserCentreDeRenseignement= (mouseEvent) -> {
+        System.out.println("Passer a été demandé");
+        GestionJeu.getJeu().passerAEteChoisi();
+        VueCarte.resetCartesDevoilees();
+        boutonPasser.disableProperty().unbind();
+        boutonPasser.setOnMouseClicked(actionPasserParDefaut);
+
     };
 
     public Pane getInfoJoueurCourant() {

@@ -92,9 +92,9 @@ public class VueDuJeu extends GridPane {
         conteneurReserve.setStyle("-fx-background-color: rgb(255,255,255,0.4)");
         ColumnConstraints colUne = new ColumnConstraints();
         colUne.setMinWidth(0.08681 * LONGUEUR_ECRAN);
-        // ColumnConstraints colDeux = new ColumnConstraints();
-        // colUne.setPercentWidth(70);
-        // colDeux.setPercentWidth(30);
+//        ColumnConstraints colDeux = new ColumnConstraints();
+//        colUne.setPercentWidth(70);
+//        colDeux.setPercentWidth(30);
         getColumnConstraints().addAll(colUne);
 
         RowConstraints rowDeux = new RowConstraints();
@@ -107,6 +107,8 @@ public class VueDuJeu extends GridPane {
         conteneurPlateau = new StackPane();
         conteneurPlateau.setStyle("-fx-background-color: rgba(255,255,255,0.4)");
         VueCarte.creerZoneAffichageZoom(conteneurPlateau);
+        VueCarte.creerZoneAffichageDevoilee(conteneurPlateau);
+        conteneurPlateau.setStyle("-fx-background-color: #722222");
         conteneurPlateau.getChildren().add(plateau);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/top.fxml"));

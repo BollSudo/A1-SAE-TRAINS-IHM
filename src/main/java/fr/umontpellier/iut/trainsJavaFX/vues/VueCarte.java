@@ -2,12 +2,17 @@ package fr.umontpellier.iut.trainsJavaFX.vues;
 
 import fr.umontpellier.iut.trainsJavaFX.GestionJeu;
 import fr.umontpellier.iut.trainsJavaFX.ICarte;
+import fr.umontpellier.iut.trainsJavaFX.IJoueur;
+import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.ListeDeCartes;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -17,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.text.Normalizer;
+
 
 /**
  * Cette classe représente la vue d'une carte.
@@ -29,6 +35,10 @@ public class VueCarte extends StackPane {
     public static double LONGUEUR_INIT = VueDuJeu.LONGUEUR_ECRAN * 113.75 / 1280.0;
     public static double HAUTEUR_INIT = VueDuJeu.HAUTEUR_ECRAN * 151.25 / 800.0;
     private static VueCarte zoneAffichage;
+    private static VueCarte zoneAffichageCarteDevoilee;
+
+
+//    private static IntegerProperty nbCartesDevoilesProperty;
 
     public VueCarte(ICarte carte) {
         this.carte = carte;
@@ -46,6 +56,7 @@ public class VueCarte extends StackPane {
         Image image = new Image(nomCarteValide(carte.getNom()));
         setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(1, 1, true, true, false,false))));
     }
+
 
     public String nomCarteValide(String carte){
         String str = Normalizer.normalize(carte.toLowerCase(), Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
@@ -67,8 +78,14 @@ public class VueCarte extends StackPane {
         public void handle(MouseEvent mouseEvent) {
             GestionJeu.getJeu().joueurCourantProperty().get().uneCarteDeLaMainAEteChoisie(carte.getNom());
             System.out.println("La carte" + carte.getNom() + " a été choisie");
-            if (carte.getNom().equals("Feu de signalisation")) {
-                devoilerCartePioche();
+            switch (carte.getNom()) {
+                case "Centre de renseignements" ->  devoilerCartesAChoisir(true);
+                case "Feu de signalisation" -> devoilerCartesAChoisir(false);
+                case "Centre de contrôle" -> {
+                    actionCentreDeControle();
+
+                }
+
             }
         }
     };
@@ -89,7 +106,33 @@ public class VueCarte extends StackPane {
         }
     };
 
+    private final EventHandler<MouseEvent> handlerCarteAChoisir = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            GestionJeu.getJeu().uneCarteAChoisirChoisie(carte.getNom());
+            zoneAffichageCarteDevoilee.getChildren().remove(trouverVueCartePratique(carte));
+            System.out.println("La carte à choisir a été choisie : " + carte.getNom());
+        }
+    };
 
+    private final EventHandler<MouseEvent> handlerCarteAChoisirSupression = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            GestionJeu.getJeu().uneCarteAChoisirChoisie(carte.getNom());
+            zoneAffichageCarteDevoilee.getChildren().remove(trouverVueCartePratique(carte));
+            resetCartesDevoilees();
+            System.out.println("La carte à choisir a été choisie : " + carte.getNom());
+        }
+    };
+
+    private VueCarte trouverVueCartePratique(ICarte carte) {
+        for (Node n : zoneAffichageCarteDevoilee.getChildren()) {
+            if (((VueCarte) n).getCarte().getNom().equals(carte.getNom())) {
+                return (VueCarte) n;
+            }
+        }
+        return null;
+    }
 
     //GETTERS ===============================================
 
@@ -101,6 +144,9 @@ public class VueCarte extends StackPane {
 
     public EventHandler<MouseEvent> getHandlerCarteEnJeu() {
         return handlerCarteEnJeu;
+    }
+    public EventHandler<MouseEvent> getHandlerCarteAChoisir() {
+        return handlerCarteAChoisir;
     }
 
     public ICarte getCarte() {
@@ -117,14 +163,16 @@ public class VueCarte extends StackPane {
         setOnMouseEntered((event) -> {
             setScaleX(scaleZoom);
             setScaleY(scaleZoom);
-            setViewOrder(viewOrderOnHover);
+            if (viewOrderOnHover != -99)
+                setViewOrder(viewOrderOnHover);
             creerApercuZoomCarte();
             zoneAffichage.setViewOrder(-1);
         });
         setOnMouseExited((event) -> {
             setScaleX(1);
             setScaleY(1);
-            setViewOrder(0);
+            if (viewOrderOnHover != -99)
+                setViewOrder(0);
             zoneAffichage.setBackground(null);
             zoneAffichage.setViewOrder(99);
         });
@@ -134,23 +182,23 @@ public class VueCarte extends StackPane {
 
     //BINDINGS RATIO
 
-    public void createBindingsRatio() {
+    public void createBindingsRatio(double minRatio) {
         DoubleProperty b = VueDuJeu.ratioResolutionFenetreProperty();
-        minWidthProperty().bind(Bindings.when(b.greaterThan(0.4))
+        minWidthProperty().bind(Bindings.when(b.greaterThan(minRatio))
                         .then(b.multiply(getMinWidth()))
-                        .otherwise(getMinWidth() * 0.4)
+                        .otherwise(getMinWidth() * minRatio)
                 );
-        maxWidthProperty().bind(Bindings.when(b.greaterThan(0.4))
+        maxWidthProperty().bind(Bindings.when(b.greaterThan(minRatio))
                 .then(b.multiply(getMinWidth()))
-                .otherwise(getMinWidth() * 0.4)
+                .otherwise(getMinWidth() * minRatio)
         );
-        minHeightProperty().bind(Bindings.when(b.greaterThan(0.4))
+        minHeightProperty().bind(Bindings.when(b.greaterThan(minRatio))
                 .then(b.multiply(getMinHeight()))
-                .otherwise(getMinHeight() * 0.4)
+                .otherwise(getMinHeight() * minRatio)
         );
-        maxHeightProperty().bind(Bindings.when(b.greaterThan(0.4))
+        maxHeightProperty().bind(Bindings.when(b.greaterThan(minRatio))
                 .then(b.multiply(getMinHeight()))
-                .otherwise(getMinHeight() * 0.4)
+                .otherwise(getMinHeight() * minRatio)
         );
     }
 
@@ -172,7 +220,7 @@ public class VueCarte extends StackPane {
     public static void creerZoneAffichageZoom(StackPane pane) {
         VueCarte v = new VueCarte(GestionJeu.getJeu().getReserve().get(0));
         v.scale(2.5);
-        v.createBindingsRatio();
+        v.createBindingsRatio(0.4);
         v.setBackground(null);
         zoneAffichage = v;
         pane.getChildren().add(zoneAffichage);
@@ -180,14 +228,76 @@ public class VueCarte extends StackPane {
         StackPane.setMargin(zoneAffichage, new Insets(10));
     }
 
-    private static void devoilerCartePioche() {
-        ListeDeCartes pioche = GestionJeu.getJeu().joueurCourantProperty().get().piocheProperty();
-        if (!pioche.isEmpty()) {
-            VueCarte v = new VueCarte(pioche.get(0));
-            v.createBindingsRatio();
-            v.setCarteHover(1.0, 0);
-            VueAutresJoueurs.addZoneCarteDevoilee(v);
+    public static void creerZoneAffichageDevoilee(StackPane pane) {
+        VueCarte v = new VueCarte(GestionJeu.getJeu().getReserve().get(0));
+        v.scale(1);
+        v.createBindingsRatio(0.4);
+        v.setBackground(null);
+        zoneAffichageCarteDevoilee = v;
+        pane.getChildren().add(zoneAffichageCarteDevoilee);
+        StackPane.setAlignment(zoneAffichageCarteDevoilee, Pos.BOTTOM_RIGHT);
+        StackPane.setMargin(zoneAffichageCarteDevoilee, new Insets(10));
+        zoneAffichage.setViewOrder(99);
+    }
+
+
+    public static void actionCentreDeControle() {
+        int count = 0;
+        zoneAffichageCarteDevoilee.setViewOrder(-1);
+        for (ICarte carte : GestionJeu.getJeu().joueurCourantProperty().get().cartesAChoisir()) {
+            VueCarte v = new VueCarte(carte);
+            v.createBindingsRatio(0.2);
+
+            v.setCarteChoisieListener(v.handlerCarteAChoisirSupression);
+            if (count < 9) {
+                StackPane.setMargin(v, new Insets(0, zoneAffichageCarteDevoilee.getChildren().size() * v.getMaxWidth(), 10, 0));
+                v.setViewOrder(1);
+                v.setCarteHover(1, -99);
+            } else {
+                StackPane.setMargin(v, new Insets(0, (zoneAffichageCarteDevoilee.getChildren().size()-8) * v.getMaxWidth(), v.getMaxHeight()+30, 0));
+                v.setViewOrder(2);
+                v.setCarteHover(1, -99);
+            }
+            zoneAffichageCarteDevoilee.getChildren().add(v);
+            count++;
         }
+    }
+
+
+
+//    private static void devoilerUneCartePioche() {
+//        ListeDeCartes pioche = GestionJeu.getJeu().joueurCourantProperty().get().piocheProperty();
+//        if (!pioche.isEmpty()) {
+//            VueCarte v = new VueCarte(pioche.get(0));
+//            v.createBindingsRatio();
+//            v.setCarteHover(1.0, 0);
+//            VueAutresJoueurs.addZoneCarteDevoilee(v);
+//        }
+//    }
+
+    public void devoilerCartesAChoisir(boolean handlerAchoisir) {
+        for (Carte carte : GestionJeu.getJeu().joueurCourantProperty().get().cartesAChoisir()) {
+            VueCarte v = new VueCarte(carte);
+            if (handlerAchoisir) {
+                v.setCarteChoisieListener(v.handlerCarteAChoisir);
+            }
+            v.scale(1);
+            v.createBindingsRatio(0.4);
+            v.setCarteHover(1.0, 0);
+            StackPane.setMargin(v, new Insets(0, 0, 10, zoneAffichageCarteDevoilee.getChildren().size() * v.getMaxWidth()));
+            zoneAffichageCarteDevoilee.getChildren().add(v);
+            zoneAffichageCarteDevoilee.setViewOrder(-1);
+        }
+    }
+
+    public static void resetCartesDevoilees() {
+        zoneAffichageCarteDevoilee.setViewOrder(99);
+        zoneAffichageCarteDevoilee.getChildren().clear();
+    }
+
+
+    public static VueCarte getZoneAffichageCarteDevoilee() {
+        return zoneAffichageCarteDevoilee;
     }
 
 }
