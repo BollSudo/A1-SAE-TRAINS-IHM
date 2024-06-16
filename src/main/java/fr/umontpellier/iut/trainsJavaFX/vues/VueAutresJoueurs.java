@@ -5,6 +5,7 @@ import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -13,6 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,7 +64,7 @@ public class VueAutresJoueurs extends VBox {
 
     List<VueUnAutreJoueur> infosAutresJoueurs;
     VueUnAutreJoueur infoJoueurCourant;
-    HBox infoTurnOrder;
+    VBox infoTurnOrder;
     public VueAutresJoueurs() {
         setStyle("-fx-background-color: rgb(255,255,255, 0.4)");
         setAlignment(Pos.TOP_CENTER);
@@ -73,7 +76,10 @@ public class VueAutresJoueurs extends VBox {
                 infoJoueurCourant = new VueUnAutreJoueur(joueur);
             }
         }
-        infoTurnOrder = new HBox(new Label("Next Player ->"));
+        Label nomVille = new Label(GestionJeu.getJeu().getNomVille());
+        nomVille.setFont(Font.font("Oswald", FontWeight.BOLD, 20));
+        infoTurnOrder = new VBox(new HBox(nomVille), new HBox(new Label("Next Player ->")));
+        infoTurnOrder.setPadding(new Insets(0, 0, 0, 5));
     }
 
     private void afficher() {

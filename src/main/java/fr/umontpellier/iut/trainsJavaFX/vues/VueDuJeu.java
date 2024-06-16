@@ -182,6 +182,10 @@ public class VueDuJeu extends GridPane {
                 return "-fx-text-fill: ".concat(CouleursJoueurs.couleursBackgroundJoueur.get(j.getValue().getCouleur()));
             }
         });
+
+        vueJoueurCourant.getNomJoueurCourant().textProperty().bind(nomJoueurCourant.textProperty());
+        vueJoueurCourant.getNomJoueurCourant().styleProperty().bind(nomJoueurCourant.styleProperty());
+
     }
 
     public IJeu getJeu() {

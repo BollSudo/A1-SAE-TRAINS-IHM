@@ -5,6 +5,7 @@ import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.ListeDeCartes;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -49,6 +50,18 @@ public class VueJoueurCourant extends HBox {
     @FXML
     private Label labelNbPointsRails;
     @FXML
+    private Label labelNbCartesPioche;
+    @FXML
+    private Label labelNbCartesDefausse;
+    @FXML
+    private Label labelCartesMain;
+    @FXML
+    private Label labelCartesRecues;
+    @FXML
+    private ImageView logoCartesMain;
+    @FXML
+    private ImageView logoCartesRecues;
+    @FXML
     private ImageView logoJetonsRails;
     @FXML
     private ImageView imageDefausse;
@@ -62,6 +75,10 @@ public class VueJoueurCourant extends HBox {
     private FlowPane conteneurCartesEnJeu;
     @FXML
     private Pane conteneurCartesRecues;
+    @FXML
+    private Label nomJoueurCourant;
+
+
 
     public VueJoueurCourant(IJoueur joueur) {
 
@@ -120,7 +137,7 @@ public class VueJoueurCourant extends HBox {
 
             j.cartesRecuesProperty().addListener((ListChangeListener<Carte>) change -> {
                 while (change.next()) {
-                    int translateXFactor = 10;
+                    int translateXFactor = 7;
                     for (Carte carte : change.getAddedSubList()) {
                         VueCarte c = new VueCarte(carte);
                         c.setCarteHover(1.0, 0);
@@ -144,6 +161,26 @@ public class VueJoueurCourant extends HBox {
         labelNbPointsRails.textProperty().bind(joueurCourant.pointsRailsProperty().asString());
         labelNbArgent.textProperty().bind(joueurCourant.argentProperty().asString());
         labelNbJetonsRails.textProperty().bind(joueurCourant.nbJetonsRailsProperty().asString());
+
+        labelNbCartesPioche.textProperty().bind(new StringBinding() {
+            {
+                super.bind(joueurCourant.piocheProperty());
+            }
+            @Override
+            protected String computeValue() {
+                return String.valueOf(joueurCourant.piocheProperty().size());
+            }
+        });
+        labelNbCartesDefausse.textProperty().bind(new StringBinding() {
+            {
+                super.bind(joueurCourant.defausseProperty());
+            }
+            @Override
+            protected String computeValue() {
+                return String.valueOf(joueurCourant.defausseProperty().size());
+            }
+        });
+
         creerBindingsImagesCartesRatio(imageDeck, 0.5);
         creerBindingsImagesCartesRatio(imageDefausse, 0.5);
     }
@@ -185,6 +222,10 @@ public class VueJoueurCourant extends HBox {
         });
 
         boutonPasser.setOnMouseClicked(actionPasserParDefaut);
+        logoCartesMain.setOnMouseEntered((mouseEvent -> labelCartesMain.setVisible(true)));
+        logoCartesMain.setOnMouseExited((mouseEvent -> labelCartesMain.setVisible(false)));
+        logoCartesRecues.setOnMouseEntered((mouseEvent -> labelCartesRecues.setVisible(true)));
+        logoCartesRecues.setOnMouseExited((mouseEvent -> labelCartesRecues.setVisible(false)));
     }
 
     EventHandler<? super MouseEvent> actionPasserParDefaut = (mouseEvent) -> {
@@ -200,12 +241,16 @@ public class VueJoueurCourant extends HBox {
 
     private void creerBindingsImagesCartesRatio(ImageView imageView, double minRatio) {
         imageView.fitWidthProperty().bind(Bindings.when(VueDuJeu.ratioResolutionFenetreProperty().greaterThan(minRatio))
-                .then(VueDuJeu.ratioResolutionFenetreProperty().multiply(VueCarte.LONGUEUR_INIT))
-                .otherwise(VueCarte.LONGUEUR_INIT * minRatio)
+                .then(VueDuJeu.ratioResolutionFenetreProperty().multiply(VueCarte.LONGUEUR_INIT).multiply(1.2))
+                .otherwise(VueCarte.LONGUEUR_INIT * minRatio * 1.2)
         );
         imageView.fitHeightProperty().bind(Bindings.when(VueDuJeu.ratioResolutionFenetreProperty().greaterThan(minRatio))
-                .then(VueDuJeu.ratioResolutionFenetreProperty().multiply(VueCarte.HAUTEUR_INIT))
-                .otherwise(VueCarte.HAUTEUR_INIT * minRatio)
+                .then(VueDuJeu.ratioResolutionFenetreProperty().multiply(VueCarte.HAUTEUR_INIT).multiply(1.2))
+                .otherwise(VueCarte.HAUTEUR_INIT * minRatio * 1.2)
         );
+    }
+
+    public Label getNomJoueurCourant() {
+        return nomJoueurCourant;
     }
 }

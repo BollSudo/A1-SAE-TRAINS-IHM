@@ -9,12 +9,34 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER">
          <children>
-            <Label maxHeight="50.0" minHeight="50.0" text="DECK : nbcartes" />
+            <HBox alignment="CENTER" fillHeight="false">
+               <children>
+                  <Label text="Deck">
+                     <font>
+                        <Font name="Forte" size="15.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/pioche.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="labelNbCartesPioche" text="nbcartes">
+                     <font>
+                        <Font name="Agency FB Bold" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
             <Separator />
             <ImageView fx:id="imageDeck" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -37,23 +59,35 @@
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="Forte" size="15.0" />
+                                 </font>
                               </Label>
-                              <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/icons/coins.png" />
                                  </image></ImageView>
-                              <Label fx:id="labelNbArgent" text="Gold : 0" />
-                              <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
+                              <Label fx:id="labelNbArgent" text="Gold : 0">
+                                 <font>
+                                    <Font name="Agency FB Bold" size="15.0" />
+                                 </font></Label>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/icons/rail.png" />
                                  </image></ImageView>
-                              <Label fx:id="labelNbPointsRails" text="Rails : 0" />
-                              <ImageView fx:id="logoJetonsRails" fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
+                              <Label fx:id="labelNbPointsRails" text="Rails : 0">
+                                 <font>
+                                    <Font name="Agency FB Bold" size="15.0" />
+                                 </font></Label>
+                              <ImageView fx:id="logoJetonsRails" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
                               </ImageView>
-                              <Label fx:id="labelNbJetonsRails" text="Ferraille : 0" />
+                              <Label fx:id="labelNbJetonsRails" text="Cube">
+                                 <font>
+                                    <Font name="Agency FB Bold" size="15.0" />
+                                 </font></Label>
                            </children>
                         </HBox>
                      </children>
@@ -71,19 +105,29 @@
             <Separator layoutX="10.0" layoutY="10.0" />
             <HBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
                <children>
-                  <HBox fx:id="conteneurMainBottom" alignment="CENTER" HBox.hgrow="ALWAYS" />
-                  <VBox alignment="TOP_RIGHT" fillWidth="false" layoutX="206.0" layoutY="10.0" minWidth="60.0" HBox.hgrow="NEVER">
+                  <VBox fillWidth="false" layoutX="265.0" layoutY="10.0" minWidth="27.0">
                      <children>
                         <HBox alignment="CENTER">
                            <children>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="logoCartesMain" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/icons/cards.png" />
+                                    <Image url="@../images/icons/main.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="labelCartesRecues" text="Recues" />
                            </children>
                         </HBox>
+                        <Label fx:id="labelCartesMain" text="Main" textFill="#74ba42" visible="false" wrapText="true" />
+                     </children>
+                  </VBox>
+                  <HBox fx:id="conteneurMainBottom" alignment="CENTER" HBox.hgrow="ALWAYS" />
+                  <VBox alignment="TOP_RIGHT" fillWidth="false" layoutX="206.0" layoutY="10.0" minWidth="38.0" HBox.hgrow="NEVER">
+                     <children>
+                        <ImageView fx:id="logoCartesRecues" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons/cards.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="labelCartesRecues" text="Recues" textFill="#74ba42" visible="false" wrapText="true" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_LEFT" fillWidth="false" HBox.hgrow="NEVER">
@@ -103,7 +147,28 @@
       <Separator orientation="VERTICAL" />
       <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0">
          <children>
-            <Label maxHeight="50.0" minHeight="50.0" text="DEFAUSSE : nbcartes" VBox.vgrow="NEVER" />
+            <HBox alignment="CENTER" fillHeight="false">
+               <children>
+                  <Label text="Tas">
+                     <font>
+                        <Font name="Forte" size="15.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/defausse.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="labelNbCartesDefausse" text="nbcartes">
+                     <font>
+                        <Font name="Agency FB Bold" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
             <Separator />
             <ImageView fx:id="imageDefausse" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
