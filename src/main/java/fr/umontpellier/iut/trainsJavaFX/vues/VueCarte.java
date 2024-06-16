@@ -2,13 +2,12 @@ package fr.umontpellier.iut.trainsJavaFX.vues;
 
 import fr.umontpellier.iut.trainsJavaFX.GestionJeu;
 import fr.umontpellier.iut.trainsJavaFX.ICarte;
-import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
+import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.ListeDeCartes;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -48,7 +47,7 @@ public class VueCarte extends StackPane {
         setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(1, 1, true, true, false,false))));
     }
 
-    private String nomCarteValide(String carte){
+    public String nomCarteValide(String carte){
         String str = Normalizer.normalize(carte.toLowerCase(), Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
         //System.out.println("images/cartes/"+str.replace(" ", "_")+".jpg");
         return "images/cartes/"+str.replace(" ", "_")+".jpg";
@@ -63,21 +62,34 @@ public class VueCarte extends StackPane {
 
     //HANDLERS ============================================================================
 
-    EventHandler<MouseEvent> handlerCartesMain = new EventHandler<MouseEvent>() {
+    private final EventHandler<MouseEvent> handlerCartesMain = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             GestionJeu.getJeu().joueurCourantProperty().get().uneCarteDeLaMainAEteChoisie(carte.getNom());
             System.out.println("La carte" + carte.getNom() + " a été choisie");
+            if (carte.getNom().equals("Feu de signalisation")) {
+                devoilerCartePioche();
+            }
         }
     };
 
-    EventHandler<MouseEvent> handlerCartesReserve = new EventHandler<MouseEvent>() {
+    private final EventHandler<MouseEvent> handlerCartesReserve = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             GestionJeu.getJeu().uneCarteDeLaReserveEstAchetee(carte.getNom());
-            System.out.println("ACHAT:" + carte.getNom());
+            System.out.println("ACHAT: " + carte.getNom());
         }
     };
+
+    private final EventHandler<MouseEvent> handlerCarteEnJeu = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            GestionJeu.getJeu().joueurCourantProperty().get().uneCarteEnJeuAEteChoisie(carte.getNom());
+            System.out.println("La carte en JEU choisie : " + carte.getNom());
+        }
+    };
+
+
 
     //GETTERS ===============================================
 
@@ -86,6 +98,10 @@ public class VueCarte extends StackPane {
     }
 
     public EventHandler<MouseEvent> getHandlerCartesReserve() { return handlerCartesReserve; }
+
+    public EventHandler<MouseEvent> getHandlerCarteEnJeu() {
+        return handlerCarteEnJeu;
+    }
 
     public ICarte getCarte() {
         return carte;
@@ -163,4 +179,15 @@ public class VueCarte extends StackPane {
         StackPane.setAlignment(zoneAffichage, Pos.TOP_LEFT);
         StackPane.setMargin(zoneAffichage, new Insets(10));
     }
+
+    private static void devoilerCartePioche() {
+        ListeDeCartes pioche = GestionJeu.getJeu().joueurCourantProperty().get().piocheProperty();
+        if (!pioche.isEmpty()) {
+            VueCarte v = new VueCarte(pioche.get(0));
+            v.createBindingsRatio();
+            v.setCarteHover(1.0, 0);
+            VueAutresJoueurs.addZoneCarteDevoilee(v);
+        }
+    }
+
 }

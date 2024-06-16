@@ -108,6 +108,13 @@ public class VueJoueurCourant extends HBox {
         for (IJoueur j : GestionJeu.getJeu().getJoueurs()) {
             j.mainProperty().addListener((ListChangeListener<Carte>) change -> {
                 while (change.next()) {
+                    for (Carte carte : change.getAddedSubList()) {
+                        VueCarte c = new VueCarte(carte);
+                        c.setCarteChoisieListener(c.getHandlerCartesMain());
+                        c.setCarteHover(1.2, -1);
+                        c.createBindingsRatio();
+                        conteneurMainBottom.getChildren().add(c);
+                    }
                     for (Carte carte : change.getRemoved()) {
                         VueCarte c = trouverBoutonCartes(carte, conteneurMainBottom);
                         if (c!=null) {
@@ -124,6 +131,7 @@ public class VueJoueurCourant extends HBox {
                         c.scale(0.7);
                         c.createBindingsRatio();
                         c.setCarteHover(1.0, 0);
+                        c.setCarteChoisieListener(c.getHandlerCarteEnJeu());
                         conteneurCartesEnJeu.getChildren().add(c);
                     }
                     for (Carte carte : change.getRemoved()) {
@@ -222,10 +230,22 @@ public class VueJoueurCourant extends HBox {
         });
 
         boutonPasser.setOnMouseClicked(actionPasserParDefaut);
+        //boutonPasser.setOnMouseClicked(mouseEvent -> GestionJeu.getJeu().finDePartieProperty().set(true));
         logoCartesMain.setOnMouseEntered((mouseEvent -> labelCartesMain.setVisible(true)));
         logoCartesMain.setOnMouseExited((mouseEvent -> labelCartesMain.setVisible(false)));
         logoCartesRecues.setOnMouseEntered((mouseEvent -> labelCartesRecues.setVisible(true)));
         logoCartesRecues.setOnMouseExited((mouseEvent -> labelCartesRecues.setVisible(false)));
+
+        imageDefausse.setOnMouseClicked(mouseEvent -> {
+            joueurCourant.laDefausseAEteChoisie();
+            VueAutresJoueurs.resetCarteDevoille();
+            System.out.println("La défausse a été choisie");
+        });
+        imageDeck.setOnMouseClicked(mouseEvent -> {
+            joueurCourant.laPiocheAEteChoisie();
+            VueAutresJoueurs.resetCarteDevoille();
+            System.out.println("La pioche a été choisie");
+        });
     }
 
     EventHandler<? super MouseEvent> actionPasserParDefaut = (mouseEvent) -> {
