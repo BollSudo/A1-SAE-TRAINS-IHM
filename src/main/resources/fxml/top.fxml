@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
@@ -15,6 +16,24 @@
             <ImageView fx:id="logoJeu" fitHeight="25.0" fitWidth="129.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/logoTrains.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER">
+         <children>
+            <ImageView fx:id="logoHome" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons/home.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER">
+         <children>
+            <ImageView fx:id="logoInfo" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons/info.png" />
                </image>
             </ImageView>
          </children>
@@ -41,4 +60,7 @@
          </children>
       </VBox>
    </children>
+   <padding>
+      <Insets bottom="5.0" top="5.0" />
+   </padding>
 </HBox>

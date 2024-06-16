@@ -5,6 +5,7 @@ import fr.umontpellier.iut.trainsJavaFX.ICarte;
 import fr.umontpellier.iut.trainsJavaFX.IJeu;
 import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.IntegerBinding;
@@ -19,8 +20,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -36,6 +40,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Optional;
 
 /**
  * Cette classe correspond à la fenêtre principale de l'application.
@@ -70,7 +75,10 @@ public class VueDuJeu extends GridPane {
     @FXML
     private Label nomJoueurCourant;
     @FXML
-    private Button boutonPasser;
+    private ImageView logoHome;
+    @FXML
+    private ImageView logoInfo;
+
 
     public VueDuJeu(IJeu jeu) {
         Image image  = new Image("images/fond/fond.png");
@@ -136,14 +144,40 @@ public class VueDuJeu extends GridPane {
     }
 
     private void creerListeners() {
+        logoInfo.setOnMouseClicked(mouseEvent -> afficherCInformation());
+        logoHome.setOnMouseEntered((mouseEvent -> {
+            logoHome.setScaleX(1.2);
+            logoHome.setScaleY(1.2);
+        }));
+        logoHome.setOnMouseExited((mouseEvent -> {
+            logoHome.setScaleX(1);
+            logoHome.setScaleY(1);
+        }));
+        logoInfo.setOnMouseEntered((mouseEvent -> {
+            logoInfo.setScaleX(1.2);
+            logoInfo.setScaleY(1.2);
+        }));
+        logoInfo.setOnMouseExited((mouseEvent -> {
+            logoInfo.setScaleX(1);
+            logoInfo.setScaleY(1);
+        }));
         getJeu().finDePartieProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
                 fin.show(fenetre, 1, 1);
             }
         });
-        //boutonPasser.setOnMouseClicked(actionPasserParDefaut);
+    }
 
+    public void afficherCInformation() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("INFO");
+        alert.setContentText("Revenir à la page d'accueil ?");
+        alert.showAndWait();
+    }
+
+    public ImageView getLogoHome() {
+        return logoHome;
     }
 
     public void creerBindings() {
@@ -191,17 +225,6 @@ public class VueDuJeu extends GridPane {
     public IJeu getJeu() {
         return jeu;
     }
-
-    public static StackPane getConteneurPlateau() {
-        return conteneurPlateau;
-    }
-
-    EventHandler<? super MouseEvent> actionPasserParDefaut = (mouseEvent) -> {
-        System.out.println("Passer a été demandé");
-        getJeu().passerAEteChoisi();
-    };
-
-
 
 
     private void creerReserve() {
