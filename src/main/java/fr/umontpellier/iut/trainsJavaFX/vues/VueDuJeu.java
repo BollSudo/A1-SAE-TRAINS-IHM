@@ -1,47 +1,24 @@
 package fr.umontpellier.iut.trainsJavaFX.vues;
 
-import fr.umontpellier.iut.trainsJavaFX.GestionJeu;
-import fr.umontpellier.iut.trainsJavaFX.ICarte;
 import fr.umontpellier.iut.trainsJavaFX.IJeu;
 import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import fr.umontpellier.iut.trainsJavaFX.mecanique.cartes.Carte;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Popup;
 import javafx.stage.Screen;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Optional;
 
 /**
  * Cette classe correspond à la fenêtre principale de l'application.
@@ -61,13 +38,13 @@ public class VueDuJeu extends GridPane {
     private VueAutresJoueurs vueAutresJoueurs;
     private Pane conteneurInstruction;
     private ImageView boutonArgent;
-
     private static StackPane conteneurPlateau;
 
 
     public static final double HAUTEUR_ECRAN = Screen.getPrimary().getBounds().getHeight();
     public static final double LONGUEUR_ECRAN = Screen.getPrimary().getBounds().getWidth();
     private static DoubleProperty ratioResolutionFenetre;
+
 
     @FXML
     private Label instruction;
@@ -80,25 +57,13 @@ public class VueDuJeu extends GridPane {
 
 
     public VueDuJeu(IJeu jeu) {
-        Image image  = new Image("images/fond/fond.png");
-        this.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(1, 1, true, true, false,false))));
         createRatio();
         this.jeu = jeu;
         plateau = new VuePlateau();
         vueJoueurCourant = new VueJoueurCourant(jeu.joueurCourantProperty().get());
         vueAutresJoueurs = new VueAutresJoueurs();
         conteneurReserve = new GridPane();
-        conteneurReserve.setStyle("-fx-background-color: rgb(255,255,255,0.4)");
-        ColumnConstraints colUne = new ColumnConstraints();
-        colUne.setMinWidth(0.08681 * LONGUEUR_ECRAN);
-        getColumnConstraints().addAll(colUne);
-
-        RowConstraints rowDeux = new RowConstraints();
-        rowDeux.setMinHeight(0.1 * HAUTEUR_ECRAN);
-        getRowConstraints().addAll(new RowConstraints(), new RowConstraints(), rowDeux);
-
         conteneurPlateau = new StackPane();
-        conteneurPlateau.setStyle("-fx-background-color: rgba(255,255,255,0.4)");
         VueCarte.creerZoneAffichageZoom(conteneurPlateau);
         VueCarte.creerZoneAffichageDevoilee(conteneurPlateau);
         conteneurPlateau.getChildren().add(plateau);
@@ -117,50 +82,45 @@ public class VueDuJeu extends GridPane {
         add(conteneurReserve, 2, 1);
         add(vueAutresJoueurs, 0, 1, 1, 2);
 
+        setStyle();
+        setConstraints();
         creerReserve();
         creerListeners();
     }
 
-
+    private void setStyle() {
+        Image image  = new Image("images/fond/fond.png");
+        setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(1, 1, true, true, false,false))));
+        conteneurReserve.setStyle("-fx-background-color: rgba(255,255,255,0.71)");
+        conteneurPlateau.setStyle("-fx-background-color: #212528");
+    }
+    private void setConstraints() {
+        ColumnConstraints colUne = new ColumnConstraints();
+        colUne.setMinWidth(0.08681 * LONGUEUR_ECRAN);
+        getColumnConstraints().addAll(colUne);
+        RowConstraints rowDeux = new RowConstraints();
+        rowDeux.setMinHeight(0.1 * HAUTEUR_ECRAN);
+        getRowConstraints().addAll(new RowConstraints(), new RowConstraints(), rowDeux);
+    }
     private void creerListeners() {
-        logoInfo.setOnMouseClicked(mouseEvent -> afficherCInformation());
-        logoHome.setOnMouseEntered((mouseEvent -> {
-            logoHome.setScaleX(1.2);
-            logoHome.setScaleY(1.2);
-        }));
-        logoHome.setOnMouseExited((mouseEvent -> {
-            logoHome.setScaleX(1);
-            logoHome.setScaleY(1);
-        }));
-        logoInfo.setOnMouseEntered((mouseEvent -> {
-            logoInfo.setScaleX(1.2);
-            logoInfo.setScaleY(1.2);
-        }));
-        logoInfo.setOnMouseExited((mouseEvent -> {
-            logoInfo.setScaleX(1);
-            logoInfo.setScaleY(1);
-        }));
+        logoInfo.setOnMouseClicked(mouseEvent -> afficherInformation());
+        setHoverEffect(logoHome);
+        setHoverEffect(logoInfo);
+        setHoverEffect(boutonArgent);
         boutonArgent.setOnMouseClicked(mouseEvent -> {
             jeu.joueurCourantProperty().getValue().recevoirArgentAEteChoisi();
             System.out.println("Recevoir argent a été choisi");
         });
-//        getJeu().finDePartieProperty().addListener(new ChangeListener<Boolean>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-//                fin.show(fenetre, 1, 1);
-//            }
-//        });
+        vueJoueurCourant.getLabelNbArgentBig().setOnMouseEntered(mouseEvent -> {
+            boutonArgent.setScaleX(1.2);
+            boutonArgent.setScaleY(1.2);
+        });
     }
-
-    public void afficherCInformation() {
+    public void afficherInformation() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("INFO");
-        alert.setContentText("Revenir à la page d'accueil ?");
+        alert.setContentText("Projet réalisé par A. DESCHANEL & J. RENAUD - Tchuuu Tchuuu");
         alert.showAndWait();
-    }
-
-    public ImageView getLogoHome() {
-        return logoHome;
     }
 
     public void creerBindings() {
@@ -202,12 +162,14 @@ public class VueDuJeu extends GridPane {
 
         vueJoueurCourant.getNomJoueurCourant().textProperty().bind(nomJoueurCourant.textProperty());
         vueJoueurCourant.getNomJoueurCourant().styleProperty().bind(nomJoueurCourant.styleProperty());
-    }
 
-    public IJeu getJeu() {
-        return jeu;
+        boutonArgent.fitWidthProperty().bind(Bindings.when(ratioResolutionFenetreProperty().
+                greaterThan(0.4)).then(ratioResolutionFenetreProperty().multiply(75)).
+                        otherwise(0.4 * 75));
+        boutonArgent.fitHeightProperty().bind(Bindings.when(ratioResolutionFenetreProperty().
+                        greaterThan(0.4)).then(ratioResolutionFenetreProperty().multiply(75)).
+                otherwise(0.4 * 75));
     }
-
 
     private void creerReserve() {
         int i = 0;
@@ -229,11 +191,8 @@ public class VueDuJeu extends GridPane {
                 }
             }
         }
-
-
         conteneurReserve.add(creerBoutonArgent() ,i+1, j);
     }
-
     private StackPane creerBoutonArgent() {
         StackPane p = new StackPane();
         boutonArgent = new ImageView();
@@ -244,19 +203,33 @@ public class VueDuJeu extends GridPane {
         p.getChildren().addAll(boutonArgent, vueJoueurCourant.getLabelNbArgentBig());
         return p;
     }
-
-
-
     public void createRatio() {
         ratioResolutionFenetre = new SimpleDoubleProperty();
         ratioResolutionFenetre.bind(Bindings.divide(widthProperty().multiply(heightProperty()),LONGUEUR_ECRAN * HAUTEUR_ECRAN));
-
 //        ratioResolutionFenetre.addListener(((observableValue, number, t1) ->
 //                System.out.println("RESOLUTION : " + t1)));
     }
 
+    //GETTERS
+    public IJeu getJeu() {
+        return jeu;
+    }
+    public ImageView getLogoHome() {
+        return logoHome;
+    }
+
+    //STATIC
     public static DoubleProperty ratioResolutionFenetreProperty() {
         return ratioResolutionFenetre;
     }
-
+    public static void setHoverEffect(Node node) {
+        node.setOnMouseEntered((mouseEvent -> {
+            node.setScaleX(1.2);
+            node.setScaleY(1.2);
+        }));
+        node.setOnMouseExited((mouseEvent -> {
+            node.setScaleX(1);
+            node.setScaleY(1);
+        }));
+    }
 }

@@ -16,8 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.Effect;
 import javafx.scene.effect.Lighting;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -37,7 +35,6 @@ public class VueChoixJoueurs extends Stage {
 
     private final ObservableList<String> nomsJoueurs;
     private Plateau plateauChoisi;
-
     private List<StringProperty> nomsTemp;
     private IntegerProperty nombreJoueursProperty;
 
@@ -53,7 +50,6 @@ public class VueChoixJoueurs extends Stage {
     private Button boutonStart;
     @FXML
     private Label errorMessage;
-
     private String styleBoutonVert;
     private String styleBoutonGris;
 
@@ -174,7 +170,6 @@ public class VueChoixJoueurs extends Stage {
         nombreJoueursProperty.addListener((change) -> creerListeInputs());
     }
 
-
     private void setEffetZoom(Node node, double scaleOfZoom) {
         node.setOnMouseEntered((mouseEvent -> {
             node.setScaleX(scaleOfZoom);
@@ -185,7 +180,6 @@ public class VueChoixJoueurs extends Stage {
             node.setScaleY(1);
         }));
     }
-
 
     private void resetEffectBoutonsNbJoueurs() {
         for (Node bouton : conteneurBoutons.getChildren()) {

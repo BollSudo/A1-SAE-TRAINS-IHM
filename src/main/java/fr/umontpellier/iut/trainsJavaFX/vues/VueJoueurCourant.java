@@ -12,15 +12,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.Glow;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,9 +36,7 @@ import java.io.IOException;
 public class VueJoueurCourant extends HBox {
 
     private IJoueur joueurCourant;
-
     private ObjectProperty<IJoueur> joueurCourantProperty;
-
     @FXML
     private HBox conteneurMainBottom;
     @FXML
@@ -60,6 +54,8 @@ public class VueJoueurCourant extends HBox {
     @FXML
     private Label labelCartesRecues;
     @FXML
+    private Label labelScore;
+    @FXML
     private ImageView logoCartesMain;
     @FXML
     private ImageView logoCartesRecues;
@@ -70,7 +66,7 @@ public class VueJoueurCourant extends HBox {
     @FXML
     private ImageView imageDeck;
     @FXML
-    private Button boutonPasser;
+    private ImageView boutonPasser;
     @FXML
     private VBox infoJoueurCourant;
     @FXML
@@ -79,21 +75,17 @@ public class VueJoueurCourant extends HBox {
     private Pane conteneurCartesRecues;
     @FXML
     private Label nomJoueurCourant;
-
-    private  Label labelNbArgentBig;
-
-
-    private ObservableList<Carte> cartesDevoilees;
+    private Label labelNbArgentBig;
 
 
     public VueJoueurCourant(IJoueur joueur) {
 
         joueurCourant = joueur;
-        this.setStyle("-fx-background-color: rgba(227,186,142,0.8)");
+        setStyle("-fx-background-color: rgba(227,186,142,0.8)");
         joueurCourantProperty = new SimpleObjectProperty<>(joueur);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/main.fxml"));
-            FXMLLoader loader2 = new FXMLLoader(getClass().getClassLoader().getResource("fxml/info.fxml"));
+            FXMLLoader loader2 = new FXMLLoader(getClass().getClassLoader().getResource("fxml/right.fxml"));
             loader.setController(this);
             HBox conteneurMain = loader.load();
             loader2.setController(this);
@@ -111,9 +103,9 @@ public class VueJoueurCourant extends HBox {
         creerListeners();
         createBindings();
 
-
-        //LISTENERS LISTES DE CARTES DES JOUEURS
+        //LISTENERS DE LISTES DE CARTES DES JOUEURS
         for (IJoueur j : GestionJeu.getJeu().getJoueurs()) {
+            //MAIN
             j.mainProperty().addListener((ListChangeListener<Carte>) change -> {
                 while (change.next()) {
                     for (Carte carte : change.getAddedSubList()) {
@@ -131,7 +123,7 @@ public class VueJoueurCourant extends HBox {
                     }
                 }
             });
-
+            //EN JEU
             j.cartesEnJeuProperty().addListener((ListChangeListener<Carte>) change -> {
                 while (change.next()) {
                     for (Carte carte : change.getAddedSubList()) {
@@ -197,6 +189,7 @@ public class VueJoueurCourant extends HBox {
         labelNbArgent.textProperty().bind(joueurCourant.argentProperty().asString());
         labelNbJetonsRails.textProperty().bind(joueurCourant.nbJetonsRailsProperty().asString());
         labelNbArgentBig.textProperty().bind(joueurCourant.argentProperty().asString());
+        labelScore.textProperty().bind(joueurCourant.scoreProperty().asString());
 
         labelNbCartesPioche.textProperty().bind(new StringBinding() {
             {
@@ -221,6 +214,17 @@ public class VueJoueurCourant extends HBox {
         creerBindingsImagesCartesRatio(imageDefausse, 0.5);
     }
 
+    private void creerBindingsImagesCartesRatio(ImageView imageView, double minRatio) {
+        imageView.fitWidthProperty().bind(Bindings.when(VueDuJeu.ratioResolutionFenetreProperty().greaterThan(minRatio))
+                .then(VueDuJeu.ratioResolutionFenetreProperty().multiply(VueCarte.LONGUEUR_INIT).multiply(1.2))
+                .otherwise(VueCarte.LONGUEUR_INIT * minRatio * 1.2)
+        );
+        imageView.fitHeightProperty().bind(Bindings.when(VueDuJeu.ratioResolutionFenetreProperty().greaterThan(minRatio))
+                .then(VueDuJeu.ratioResolutionFenetreProperty().multiply(VueCarte.HAUTEUR_INIT).multiply(1.2))
+                .otherwise(VueCarte.HAUTEUR_INIT * minRatio * 1.2)
+        );
+    }
+
 
     private void creerCartes() {
         ListeDeCartes mainJoueurCourrant = joueurCourant.mainProperty();
@@ -233,8 +237,7 @@ public class VueJoueurCourant extends HBox {
         }
     }
 
-
-    public VueCarte trouverBoutonCartes(Carte carteAtrouver, Pane n) {
+    private VueCarte trouverBoutonCartes(Carte carteAtrouver, Pane n) {
         for (Node node : n.getChildren()) {
             VueCarte c = (VueCarte) node;
             if (carteAtrouver.getNom().equals((c.getCarte().getNom()))) {
@@ -259,11 +262,12 @@ public class VueJoueurCourant extends HBox {
         });
 
         boutonPasser.setOnMouseClicked(actionPasserParDefaut);
-        //boutonPasser.setOnMouseClicked(mouseEvent -> GestionJeu.getJeu().finDePartieProperty().set(true));
         logoCartesMain.setOnMouseEntered((mouseEvent -> labelCartesMain.setVisible(true)));
         logoCartesMain.setOnMouseExited((mouseEvent -> labelCartesMain.setVisible(false)));
         logoCartesRecues.setOnMouseEntered((mouseEvent -> labelCartesRecues.setVisible(true)));
         logoCartesRecues.setOnMouseExited((mouseEvent -> labelCartesRecues.setVisible(false)));
+        labelNbArgentBig.setOnMouseClicked((mouseEvent -> joueurCourant.recevoirArgentAEteChoisi()));
+        VueDuJeu.setHoverEffect(boutonPasser);
 
         imageDefausse.setOnMouseClicked(mouseEvent -> {
             joueurCourant.laDefausseAEteChoisie();
@@ -278,21 +282,24 @@ public class VueJoueurCourant extends HBox {
             desactiverBoutonsDeckDefausse();
         });
     }
-
     private void desactiverBoutonsDeckDefausse() {
         imageDeck.setDisable(true);
         imageDeck.setEffect(new Lighting());
         imageDefausse.setDisable(true);
         imageDefausse.setEffect(new Lighting());
     }
-
     private void activerBoutonsDeckDefausse() {
         imageDeck.setDisable(false);
         imageDeck.setEffect(null);
         imageDefausse.setDisable(false);
         imageDefausse.setEffect(null);
     }
+    private void createLabelArgent() {
+        labelNbArgentBig = new Label("0");
+        labelNbArgentBig.setFont(new Font("Oswald", 20));
+    }
 
+    //EVENT HANDLERS
     EventHandler<? super MouseEvent> actionPasserParDefaut = (mouseEvent) -> {
         System.out.println("Passer a été demandé");
         GestionJeu.getJeu().passerAEteChoisi();
@@ -304,43 +311,22 @@ public class VueJoueurCourant extends HBox {
         VueCarte.resetCartesDevoilees();
         boutonPasser.disableProperty().unbind();
         boutonPasser.setOnMouseClicked(actionPasserParDefaut);
-
     };
 
+    //GETTERS
     public Pane getInfoJoueurCourant() {
         return infoJoueurCourant;
     }
-
     public Pane getConteneurCartesRecues() {return conteneurCartesRecues;}
-
-    private void creerBindingsImagesCartesRatio(ImageView imageView, double minRatio) {
-        imageView.fitWidthProperty().bind(Bindings.when(VueDuJeu.ratioResolutionFenetreProperty().greaterThan(minRatio))
-                .then(VueDuJeu.ratioResolutionFenetreProperty().multiply(VueCarte.LONGUEUR_INIT).multiply(1.2))
-                .otherwise(VueCarte.LONGUEUR_INIT * minRatio * 1.2)
-        );
-        imageView.fitHeightProperty().bind(Bindings.when(VueDuJeu.ratioResolutionFenetreProperty().greaterThan(minRatio))
-                .then(VueDuJeu.ratioResolutionFenetreProperty().multiply(VueCarte.HAUTEUR_INIT).multiply(1.2))
-                .otherwise(VueCarte.HAUTEUR_INIT * minRatio * 1.2)
-        );
-    }
-
     public Label getNomJoueurCourant() {
         return nomJoueurCourant;
     }
-
     public IJoueur getJoueurCourant() {
         return joueurCourantProperty.get();
     }
-
     public ObjectProperty<IJoueur> joueurCourantProperty() {
         return joueurCourantProperty;
     }
-
-    private void createLabelArgent() {
-        labelNbArgentBig = new Label("0");
-        labelNbArgentBig.setFont(new Font("Oswald", 20));
-    }
-
     public Label getLabelNbArgentBig() {
         return labelNbArgentBig;
     }

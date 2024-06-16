@@ -10,10 +10,13 @@ import fr.umontpellier.iut.trainsJavaFX.vues.VueResultats;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -26,13 +29,12 @@ public class TrainsIHM extends Application {
     private VueChoixJoueurs vueChoixJoueurs;
     private Stage primaryStage;
     private Jeu jeu;
-
-    private final boolean avecVueChoixJoueurs = false;
+    private final boolean avecVueChoixJoueurs = true;
 
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        //primaryStage.setFullScreen(true);
+        primaryStage.setFullScreen(true);
         debuterJeu();
     }
 
@@ -72,6 +74,15 @@ public class TrainsIHM extends Application {
             if (t1) {afficherResultatsJeu();}
         }));
 
+        primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode()== KeyCode.F12) {
+                    primaryStage.setFullScreen(true);
+                }
+            }
+        });
+
         primaryStage.setMinWidth(Screen.getPrimary().getBounds().getWidth() / 2.5);
         primaryStage.setMinHeight(Screen.getPrimary().getBounds().getHeight() / 2.5);
         primaryStage.setMaxWidth(Screen.getPrimary().getBounds().getWidth());
@@ -95,7 +106,7 @@ public class TrainsIHM extends Application {
 
     public void arreterJeu() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation");
+        alert.setTitle("A l'arrêt !");
         alert.setContentText("On arrête de jouer ?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -106,15 +117,6 @@ public class TrainsIHM extends Application {
     public void afficherResultatsJeu() {
         VueResultats vueResultats = new VueResultats(this);
         getPrimaryStage().setScene(new Scene(vueResultats));
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("RESULTATS");
-        alert.setContentText("On arrête de jouer ?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            demarrerPartie();
-        } else {
-            Platform.exit();
-        }
     }
 
     public void afficherConfirmationHome() {
@@ -127,6 +129,7 @@ public class TrainsIHM extends Application {
             debuterJeu();
         }
     }
+
 
 
     public Jeu getJeu() {

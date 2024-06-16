@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -7,17 +8,31 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root prefHeight="400.0" prefWidth="600.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root prefHeight="400.0" prefWidth="600.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox fx:id="arriver" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="2.0">
          <children>
-            <HBox fx:id="titre" prefHeight="117.0" prefWidth="600.0">
+            <HBox fx:id="titre1" layoutX="10.0" layoutY="10.0" prefHeight="117.0" prefWidth="600.0">
                <children>
                   <Label fx:id="labelTitre" alignment="CENTER" prefHeight="80.0" prefWidth="602.0" text="Tableau des scores" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="36.0" />
                      </font>
                   </Label>
+               </children>
+            </HBox>
+            <HBox fx:id="titre" alignment="CENTER" prefHeight="117.0" prefWidth="600.0" spacing="50.0">
+               <children>
+                  <Button fx:id="boutonRecommancer" mnemonicParsing="false" text="Recommencer">
+                     <font>
+                        <Font name="Comic Sans MS Bold" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="boutonAccueil" mnemonicParsing="false" text="Accueil">
+                     <font>
+                        <Font name="Comic Sans MS Bold" size="14.0" />
+                     </font>
+                  </Button>
                </children></HBox>
             <HBox fx:id="ligne1" alignment="CENTER" prefHeight="37.0" prefWidth="600.0">
                <children>

@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER_LEFT" style="-fx-background-color: grey; -fx-border-color: rgb(0,0,0,0.5); -fx-border-width: 3;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER_LEFT" style="-fx-background-color: rgba(255,255,255,0.4); -fx-border-color: rgb(35, 36, 38); -fx-border-width: 3;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox>
          <children>

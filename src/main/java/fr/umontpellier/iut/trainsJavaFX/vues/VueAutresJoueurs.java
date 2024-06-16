@@ -98,7 +98,6 @@ public class VueAutresJoueurs extends VBox {
             }
         }
         infosAutresJoueurs.remove(infoJoueurCourant);
-
         zoneCarteDevoilee.setAlignment(Pos.BOTTOM_CENTER);
         zoneCarteDevoilee.setFillHeight(true);
         zoneCarteDevoilee.setPadding(new Insets(0, 0, 10, 0));
@@ -112,9 +111,4 @@ public class VueAutresJoueurs extends VBox {
         });
 
     }
-
-    public static void addZoneCarteDevoilee(StackPane pane) {
-        zoneCarteDevoilee.getChildren().add(pane);
-    }
-
 }

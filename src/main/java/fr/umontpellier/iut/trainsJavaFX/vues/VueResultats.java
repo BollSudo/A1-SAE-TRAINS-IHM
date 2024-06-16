@@ -5,6 +5,7 @@ import fr.umontpellier.iut.trainsJavaFX.IJoueur;
 import fr.umontpellier.iut.trainsJavaFX.TrainsIHM;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,7 +20,6 @@ import java.util.PriorityQueue;
 public class VueResultats extends Pane {
 
     private TrainsIHM ihm;
-
     @FXML
     private ImageView imageVictoire;
     @FXML
@@ -54,7 +54,10 @@ public class VueResultats extends Pane {
     private HBox ligneD;
     @FXML
     private Label labelTitre;
-
+    @FXML
+    private Button boutonRecommancer;
+    @FXML
+    private Button boutonAccueil;
 
     public VueResultats(TrainsIHM ihm) {
         this.ihm = ihm;
@@ -66,11 +69,6 @@ public class VueResultats extends Pane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-//        fin = new Popup();
-//        fin.getContent().add(new VueFinDePartie(getTableauScore().get(0)));
-
 
         Image bg = new Image("images/fond/victoire.png");//images/fond/victoire.png
         this.setBackground(new Background(new BackgroundImage(bg, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(1, 1, true, true, false,false))));
@@ -110,6 +108,12 @@ public class VueResultats extends Pane {
         ligne3.styleProperty().set("-fx-background-color: rgba(255,255,255,0.2)");
         ligneD.styleProperty().set("-fx-background-color: rgba(255,255,255,0.2)");
         labelTitre.setStyle("-fx-background-color: rgba(255,134,36,0.4); -fx-border-width: 3; -fx-border-color: #ff8800");
+
+        boutonAccueil.setOnMouseClicked(mouseEvent -> {
+            ihm.getPrimaryStage().hide();
+            ihm.start(ihm.getPrimaryStage());
+        });
+        boutonRecommancer.setOnMouseClicked(mouseEvent -> ihm.demarrerPartie());
     }
 
     private ArrayList<IJoueur> getTableauScore(){
@@ -126,7 +130,4 @@ public class VueResultats extends Pane {
         }
         return tableauScore;
     }
-
-    
-
 }
